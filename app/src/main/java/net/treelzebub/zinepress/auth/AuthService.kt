@@ -11,16 +11,15 @@ import org.scribe.oauth.OAuthService
  */
 object AuthService {
 
-    val service: OAuthService get() {
-        return ServiceBuilder()
+    val service: OAuthService get() =
+        ServiceBuilder()
+                .provider(ReadabilityApi::class.java)
                 .apiKey(Constants.CONSUMER_KEY)
                 .apiSecret(Constants.CONSUMER_SECRET)
                 .callback(Constants.CALLBACK_URL)
-                .provider(ReadabilityApi::class.java)
                 .build()
-    }
 
-    private class ReadabilityApi : DefaultApi10a() {
+    class ReadabilityApi : DefaultApi10a() {
         override fun getAccessTokenEndpoint(): String {
             return Constants.ACCESS_TOKEN_URL
         }
