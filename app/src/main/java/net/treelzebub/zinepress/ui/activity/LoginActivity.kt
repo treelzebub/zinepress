@@ -62,8 +62,7 @@ class LoginActivity : BaseRxActivity() {
         LifecycleObservable.bindActivityLifecycle(lifecycle(), manager.accessToken(code))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    Log.d("Access Token", it.accessToken)
-                    manager.saveAccessToken(it.accessToken)
+                    manager.storage.storeAccessToken(it)
                 }
     }
 }

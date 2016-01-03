@@ -8,7 +8,6 @@ import de.rheinfabrik.heimdall.extras.SharedPreferencesOAuth2AccessTokenStorage
 import net.treelzebub.zinepress.Constants
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.api.PocketApiFactory
-import net.treelzebub.zinepress.auth.model.AccessTokenRequestBody
 import net.treelzebub.zinepress.auth.model.RequestToken
 import net.treelzebub.zinepress.auth.model.RequestTokenBody
 import net.treelzebub.zinepress.util.PrefsUtils
