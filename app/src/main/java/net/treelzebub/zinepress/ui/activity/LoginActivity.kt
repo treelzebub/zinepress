@@ -28,11 +28,10 @@ class LoginActivity : BaseAuthActivity() {
     }
 
     private fun loadAuthUrl() {
-        var authUrl: String = ""
         async<String>({
-            val sAuth = AuthService.service
-            val rt = sAuth.requestToken
-            sAuth.getAuthorizationUrl(rt)
+            AuthService.service.let {
+                it.getAuthorizationUrl(it.requestToken)
+            }
         }, {
             webView.loadUrl(it)
         })
