@@ -11,5 +11,5 @@ object Constants {
     const val REQUEST_TOKEN_URL   = "$BASE_URL/oauth/request"
     const val AUTHORIZE_URL       = "$BASE_URL/oauth/authorize"
 
-    const val CALLBACK_URL        = "oauth://zinepress.treelzebub.net"
+    const val REDIRECT_URI = "oauth://zinepress.treelzebub.net"
 }

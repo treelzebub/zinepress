@@ -1,15 +1,11 @@
 package net.treelzebub.zinepress.ui.activity
 
-import android.net.Uri
 import android.os.Bundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import butterknife.bindView
 import net.treelzebub.zinepress.Constants
 import net.treelzebub.zinepress.R
-import net.treelzebub.zinepress.async.async
-import net.treelzebub.zinepress.auth.AuthService
-import net.treelzebub.zinepress.util.AuthUtils
 
 /**
  * Created by Tre Murillo on 1/2/16
@@ -24,23 +20,12 @@ class LoginActivity : BaseRxActivity() {
         wvSettings.builtInZoomControls = true
         wvSettings.javaScriptEnabled = true
         webView.setWebViewClient(RequestTokenCallback())
-        loadAuthUrl()
-    }
-
-    private fun loadAuthUrl() {
-        async<String>({
-            AuthService.service.let {
-                it.getAuthorizationUrl(it.requestToken)
-            }
-        }, {
-            webView.loadUrl(it)
-        })
     }
 
     private inner class RequestTokenCallback : WebViewClient() {
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-            if (!url.isNullOrBlank() && url.startsWith(Constants.CALLBACK_URL)) {
-                AuthUtils.requestAccessToken(this@LoginActivity, Uri.parse(url))
+            if (!url.isNullOrBlank() && url.startsWith(Constants.REDIRECT_URI)) {
+//                AuthUtils.requestAccessToken(this@LoginActivity, Uri.parse(url))
                 return true
             }
             return false
