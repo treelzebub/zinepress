@@ -1,7 +1,6 @@
 package net.treelzebub.zinepress.auth
 
 import com.squareup.okhttp.OkHttpClient
-import org.scribe.model.Token
 import retrofit.RestAdapter
 import retrofit.client.OkClient
 

@@ -7,7 +7,7 @@ import net.treelzebub.zinepress.auth.LocalCredStore
 /**
  * Created by Tre Murillo on 1/2/16
  */
-class MainActivity : BaseAuthActivity() {
+class MainActivity : BaseRxActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

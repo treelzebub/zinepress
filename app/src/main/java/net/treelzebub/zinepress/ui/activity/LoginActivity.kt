@@ -14,7 +14,7 @@ import net.treelzebub.zinepress.util.AuthUtils
 /**
  * Created by Tre Murillo on 1/2/16
  */
-class LoginActivity : BaseAuthActivity() {
+class LoginActivity : BaseRxActivity() {
     private val webView: WebView by bindView(R.id.web_view)
 
     override fun onCreate(savedInstanceState: Bundle?) {

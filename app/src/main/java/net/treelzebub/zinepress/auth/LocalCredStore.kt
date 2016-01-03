@@ -1,42 +1,20 @@
 package net.treelzebub.zinepress.auth
 
+import de.rheinfabrik.heimdall.OAuth2AccessToken
+import de.rheinfabrik.heimdall.OAuth2AccessTokenManager
+import de.rheinfabrik.heimdall.extras.SharedPreferencesOAuth2AccessTokenStorage
+import de.rheinfabrik.heimdall.grants.OAuth2Grant
 import net.treelzebub.zinepress.util.BaseInjection
 import net.treelzebub.zinepress.util.PrefsUtils
-import org.scribe.model.Token
 
 /**
  * Created by Tre Murillo on 1/2/16
  */
 object LocalCredStore {
 
-    private const val OAUTH_TOKEN  = "oauth_token"
-    private const val OAUTH_SECRET = "oauth_secret"
+    private val prefs = PrefsUtils.getPrefs(BaseInjection.context)
+    private val storage = SharedPreferencesOAuth2AccessTokenStorage<OAuth2AccessToken>(prefs, OAuth2AccessToken::class.java)
+    private val manager = OAuth2AccessTokenManager<OAuth2AccessToken>(storage)
 
-    private val context = BaseInjection.context
 
-    private val tokenPref  = PrefsUtils.userPref(OAUTH_TOKEN,  String::class.java)
-    private val secretPref = PrefsUtils.userPref(OAUTH_SECRET, String::class.java)
-
-    private var token: Token? = null
-
-    fun setToken(token: Token) {
-        this.token = token
-        tokenPref.put(context, token.token, true)
-        secretPref.put(context, token.secret, true)
-    }
-
-    fun getToken(): Token? {
-        if (token == null) {
-            val tokenStr  = tokenPref.get(context)  ?: return null
-            val secretStr = secretPref.get(context) ?: return null
-            token = Token(tokenStr, secretStr)
-        }
-        return token
-    }
-
-    fun clear() {
-        arrayOf(tokenPref, secretPref).forEach {
-            it.remove(context, true)
-        }
-    }
 }
