@@ -10,9 +10,6 @@ import retrofit.converter.GsonConverter
  */
 object PocketApiFactory {
 
-    /**
-     * Creates a new preconfigured TraktTvApiService instance.
-     */
     fun newApiService(): PocketApi {
         val restAdapterBuilder = RestAdapter.Builder()
                 .setConverter(GsonConverter(Gson()))

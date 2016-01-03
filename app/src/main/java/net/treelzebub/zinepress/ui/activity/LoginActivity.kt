@@ -2,7 +2,6 @@ package net.treelzebub.zinepress.ui.activity
 
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import net.treelzebub.zinepress.Constants
@@ -12,9 +11,8 @@ import net.treelzebub.zinepress.auth.PocketTokenManager
 import net.treelzebub.zinepress.util.setGone
 import rx.android.lifecycle.LifecycleObservable
 import rx.android.schedulers.AndroidSchedulers
-
-import kotlinx.android.synthetic.main.activity_login.web_view as webView
 import kotlinx.android.synthetic.main.activity_login.temp_text as tempText
+import kotlinx.android.synthetic.main.activity_login.web_view as webView
 
 /**
  * Created by Tre Murillo on 1/2/16
@@ -35,7 +33,6 @@ class LoginActivity : BaseRxActivity() {
         wvSettings.javaScriptEnabled   = true
         webView.setWebViewClient(object : WebViewClient() {
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
-                // Hide redirect page from user
                 if (url.startsWith(Constants.REDIRECT_URI)) {
                     val manager = PocketTokenManager.from(this@LoginActivity)
                     accessToken(manager.loadRequestToken())
@@ -47,14 +44,14 @@ class LoginActivity : BaseRxActivity() {
     private fun requestToken() {
         val manager = PocketTokenManager.from(this)
         val grant = PocketAuthCodeGrant()
-        grant.clientId    = Constants.CONSUMER_KEY
+        grant.clientId = Constants.CONSUMER_KEY
         grant.redirectUri = Constants.REDIRECT_URI
         LifecycleObservable.bindActivityLifecycle(lifecycle(), manager.requestToken())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                manager.saveRequestToken(it.code)
-                webView.loadUrl(manager.authUrl(it.code))
-            }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    manager.saveRequestToken(it.code)
+                    webView.loadUrl(manager.authUrl(it.code))
+                }
     }
 
     private fun accessToken(code: String) {

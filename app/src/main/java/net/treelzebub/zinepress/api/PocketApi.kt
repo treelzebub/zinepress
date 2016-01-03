@@ -1,6 +1,7 @@
 package net.treelzebub.zinepress.api
 
 import de.rheinfabrik.heimdall.OAuth2AccessToken
+import net.treelzebub.zinepress.api.model.PocketArticleResponse
 import net.treelzebub.zinepress.auth.model.*
 import retrofit.http.Body
 import retrofit.http.Headers
@@ -14,6 +15,7 @@ import rx.Observable
  */
 interface PocketApi {
 
+    // Auth Flow
     @POST("/v3/oauth/request")
     @Headers("Content-Type: application/json", "X-Accept: application/json")
     fun requestToken(@Body body: RequestTokenBody): Observable<RequestToken>
@@ -25,4 +27,9 @@ interface PocketApi {
     @POST("/v3/oauth/token")
     @Headers("Content-Type: application/json", "X-Accept: application/json")
     fun refreshAccessToken(@Body body: RefreshTokenRequestBody): Observable<OAuth2AccessToken>
+
+    // Authed Requests
+    @POST("/v3/get")
+    @Headers("Content-Type: application/json", "X-Accept: application/json", "contentType: article")
+    fun getArticles(@Body body: GetAuthedRequestBody): Observable<PocketArticleResponse>
 }
