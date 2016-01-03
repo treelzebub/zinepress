@@ -13,7 +13,7 @@ class RefreshTokenRequestBody : Serializable {
     @SerializedName("refresh_token")
     val refreshToken: String
 
-    @SerializedName("client_id")
+    @SerializedName("consumer_key")
     val clientId: String
 
     @SerializedName("redirect_uri")

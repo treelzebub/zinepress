@@ -16,14 +16,14 @@ class PocketAuthCodeGrant : OAuth2AuthorizationCodeGrant<OAuth2AccessToken>() {
     override fun buildAuthorizationUri(): Uri {
         return Uri.parse(Constants.AUTHORIZE_URL)
                   .buildUpon()
-                  .appendQueryParameter("client_id", clientId)
+                  .appendQueryParameter("consumer_key", clientId)
                   .appendQueryParameter("redirect_uri", redirectUri)
-                  .appendQueryParameter("response_type", RESPONSE_TYPE)
+                  .appendQueryParameter("X-Accept", "application/json")
                   .build()
     }
 
     override fun exchangeTokenUsingCode(code: String): Observable<OAuth2AccessToken> {
-        val body = AccessTokenRequestBody(code, clientId, redirectUri, GRANT_TYPE)
-        return PocketApiFactory.newApiService().grantNewAccessToken(body)
+        val body = AccessTokenRequestBody(code, Constants.CONSUMER_KEY, redirectUri)
+        return PocketApiFactory.newApiService().newAccessToken(body)
     }
 }

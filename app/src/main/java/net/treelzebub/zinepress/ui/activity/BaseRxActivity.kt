@@ -11,7 +11,7 @@ import rx.subjects.BehaviorSubject
  */
 open class BaseRxActivity : AppCompatActivity() {
 
-    private final val lifecycleSubject: BehaviorSubject<LifecycleEvent> = BehaviorSubject.create()
+    private final val lifecycleSubject = BehaviorSubject.create<LifecycleEvent>()
 
     public fun lifecycle(): Observable<LifecycleEvent> {
         return lifecycleSubject.asObservable()

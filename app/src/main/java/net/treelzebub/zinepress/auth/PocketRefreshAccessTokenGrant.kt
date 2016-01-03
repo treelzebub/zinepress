@@ -9,7 +9,7 @@ import rx.Observable
 /**
  * Created by Tre Murillo on 1/2/16
  */
-class PocketRefreshAccessTokenGrant(val clientId: String, val redirectUri: String) :OAuth2RefreshAccessTokenGrant<OAuth2AccessToken>() {
+class PocketRefreshAccessTokenGrant(val clientId: String, val redirectUri: String) : OAuth2RefreshAccessTokenGrant<OAuth2AccessToken>() {
 
     override fun grantNewAccessToken(): Observable<OAuth2AccessToken>? {
         val body = RefreshTokenRequestBody(refreshToken, clientId, redirectUri, GRANT_TYPE)

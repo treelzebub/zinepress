@@ -12,21 +12,15 @@ class AccessTokenRequestBody : Serializable {
     @SerializedName("code")
     val code: String
 
-    @SerializedName("client_id")
-    val clientId: String
+    @SerializedName("consumer_key")
+    val consumerKey: String
 
     @SerializedName("redirect_uri")
     val redirectUri: String
 
-    @SerializedName("grant_type")
-    val grantType: String
-
-    // Constructor
-
-    constructor(code: String, clientId: String, redirectUri: String, grantType: String) {
-        this.code           = code
-        this.clientId       = clientId
-        this.redirectUri    = redirectUri
-        this.grantType      = grantType
+    constructor(code: String, consumerKey: String, redirectUri: String) {
+        this.code        = code
+        this.consumerKey = consumerKey
+        this.redirectUri = redirectUri
     }
 }

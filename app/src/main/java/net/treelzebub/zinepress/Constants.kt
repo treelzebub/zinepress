@@ -4,12 +4,11 @@ package net.treelzebub.zinepress
  * Created by Tre Murillo on 1/2/16
  */
 object Constants {
+
     const val CONSUMER_KEY        = "49756-f2c439a8fa6256da0bc3710a"
 
-    // Ex: https://getpocket.com/auth/authorize?request_token=YOUR_REQUEST_TOKEN&redirect_uri=YOUR_REDIRECT_URI
-    const val BASE_URL            = "https://getpocket.com/v3"
-    const val REQUEST_TOKEN_URL   = "$BASE_URL/oauth/request"
-    const val AUTHORIZE_URL       = "$BASE_URL/oauth/authorize"
+    const val BASE_URL            = "https://getpocket.com"
+    const val AUTHORIZE_URL       = "$BASE_URL/auth/authorize"
 
-    const val REDIRECT_URI = "oauth://zinepress.treelzebub.net"
+    const val REDIRECT_URI        = "oauth://zinepress.treelzebub.net"
 }
