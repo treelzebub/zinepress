@@ -3,16 +3,13 @@ package net.treelzebub.zinepress.ui.activity
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import net.treelzebub.zinepress.Constants
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.auth.PocketAuthCodeGrant
 import net.treelzebub.zinepress.auth.PocketTokenManager
-import net.treelzebub.zinepress.auth.model.RequestToken
 import net.treelzebub.zinepress.util.setGone
-import net.treelzebub.zinepress.util.setVisible
 import rx.android.lifecycle.LifecycleObservable
 import rx.android.schedulers.AndroidSchedulers
 
@@ -40,8 +37,8 @@ class LoginActivity : BaseRxActivity() {
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                 // Hide redirect page from user
                 if (url.startsWith(Constants.REDIRECT_URI)) {
-                    webView.setGone()
-                    tempText.setVisible()
+                    val manager = PocketTokenManager.from(this@LoginActivity)
+                    accessToken(manager.loadRequestToken())
                 }
             }
         })
@@ -55,17 +52,18 @@ class LoginActivity : BaseRxActivity() {
         LifecycleObservable.bindActivityLifecycle(lifecycle(), manager.requestToken())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                Log.d("Request Token", it.code)
+                manager.saveRequestToken(it.code)
                 webView.loadUrl(manager.authUrl(it.code))
             }
     }
 
-    private fun accessToken(requestToken: RequestToken) {
+    private fun accessToken(code: String) {
         val manager = PocketTokenManager.from(this)
-        LifecycleObservable.bindActivityLifecycle(lifecycle(), manager.accessToken(requestToken))
+        LifecycleObservable.bindActivityLifecycle(lifecycle(), manager.accessToken(code))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-
+                    Log.d("Access Token", it.accessToken)
+                    manager.saveAccessToken(it.accessToken)
                 }
     }
 }

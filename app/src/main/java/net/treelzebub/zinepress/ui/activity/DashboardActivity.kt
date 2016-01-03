@@ -5,7 +5,6 @@ import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import net.treelzebub.zinepress.R
@@ -23,14 +22,8 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
         setSupportActionBar(toolbar)
-        fab.setOnClickListener {
-            Snackbar.make(it, "Do some shit", Snackbar.LENGTH_LONG).setAction("Action", null).show()
-        }
-        val toggle = ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer.setDrawerListener(toggle)
-        toggle.syncState()
-        navView.setNavigationItemSelectedListener(this)
+        setup()
+        reload()
     }
 
     override fun onBackPressed() {
@@ -64,5 +57,20 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
         }
         drawer.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun setup() {
+        fab.setOnClickListener {
+            Snackbar.make(it, "Do some shit", Snackbar.LENGTH_LONG).setAction("Action", null).show()
+        }
+        val toggle = ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer.setDrawerListener(toggle)
+        toggle.syncState()
+        navView.setNavigationItemSelectedListener(this)
+    }
+
+    private fun reload() {
+
     }
 }
