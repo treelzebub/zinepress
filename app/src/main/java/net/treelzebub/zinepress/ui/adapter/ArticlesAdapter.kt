@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.bindView
-import net.treelzebub.zinepress.zine.ZineArticles
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.api.model.PocketArticle
 import net.treelzebub.zinepress.util.ToastUtils
 import net.treelzebub.zinepress.util.view.inflater
+import net.treelzebub.zinepress.zine.SelectedArticles
 
 /**
  * Created by Tre Murillo on 1/3/16
@@ -29,7 +29,7 @@ class ArticlesAdapter : RecyclerView.Adapter<ArticlesAdapter.ItemHolder> {
 
     override fun onBindViewHolder(holder: ArticlesAdapter.ItemHolder, position: Int) {
         val article = list.elementAt(position)
-        if (article.url in ZineArticles.list()) {
+        if (article in SelectedArticles.list()) {
             holder.checkbox.isChecked = true
         }
         holder.title.text = safeTitle(article.title)
@@ -41,9 +41,9 @@ class ArticlesAdapter : RecyclerView.Adapter<ArticlesAdapter.ItemHolder> {
         holder.checkbox.setOnCheckedChangeListener {
             box, isChecked ->
             if (isChecked) {
-                ZineArticles.add(article.url)
+                SelectedArticles.add(article)
             } else {
-                ZineArticles.remove(article.url)
+                SelectedArticles.remove(article)
             }
         }
     }

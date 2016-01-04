@@ -64,6 +64,7 @@ dependencies {
     compile 'com.squareup:otto:1.3.7'
     compile 'com.google.code.gson:gson:2.4'
     compile 'net.sarazan.prefs:prefs:1.1.01@aar'
+    compile 'org.slf4j:slf4j-android:1.7.13' // epublib-core dependency
 
     // Net
     compile 'com.squareup.okhttp:okhttp:2.5.0'
@@ -81,7 +82,4 @@ dependencies {
     // UI
     compile 'uk.co.chrisjenx:calligraphy:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-
-    // ePub
-//    compile 'org.slf4j:slf4j-android:1.7.10'
 }

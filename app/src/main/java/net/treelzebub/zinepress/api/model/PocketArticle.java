@@ -14,12 +14,12 @@ public class PocketArticle {
     private final String title;
 
     @SerializedName("resolved_url")
-    private final String url;
+    private final String originalUrl;
 
     PocketArticle(long id, String title, String url) {
-        this.id = id;
-        this.title = title;
-        this.url = url;
+        this.id          = id;
+        this.title       = title;
+        this.originalUrl = url;
     }
 
     public String getTitle() {
@@ -35,6 +35,6 @@ public class PocketArticle {
     }
 
     public String getOriginalUrl() {
-        return url;
+        return originalUrl;
     }
 }
