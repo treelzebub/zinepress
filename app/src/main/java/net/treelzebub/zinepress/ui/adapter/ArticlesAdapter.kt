@@ -13,15 +13,21 @@ import net.treelzebub.zinepress.util.view.inflater
 /**
  * Created by Tre Murillo on 1/3/16
  */
-class ArticlesAdapter(val map: Map<String, PocketArticle>) : RecyclerView.Adapter<ArticlesAdapter.ItemHolder>() {
+class ArticlesAdapter : RecyclerView.Adapter<ArticlesAdapter.ItemHolder> {
+
+    val list: List<PocketArticle>
+
+    constructor(map: Map<String, PocketArticle>) {
+        this.list = map.filter { it.value.originalUrl.isNotEmpty() }.values.toList()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticlesAdapter.ItemHolder {
         return ItemHolder(parent.inflater.inflate(R.layout.item_article, parent, false))
     }
 
     override fun onBindViewHolder(holder: ArticlesAdapter.ItemHolder, position: Int) {
-        val article = map.values.elementAt(position)
-        holder.title.text = article.title
+        val article = list.elementAt(position)
+        holder.title.text = safeTitle(article.title)
         holder.url.text   = article.originalUrl
         holder.itemView.setOnClickListener {
             ToastUtils.show(holder.itemView.context, article.url)
@@ -29,15 +35,23 @@ class ArticlesAdapter(val map: Map<String, PocketArticle>) : RecyclerView.Adapte
     }
 
     override fun getItemId(position: Int): Long {
-        return map.values.elementAt(position).id
+        return list.elementAt(position).id
     }
 
     override fun getItemCount(): Int {
-        return map.values.size
+        return list.size
     }
 
     override fun getItemViewType(position: Int): Int {
         return 0
+    }
+
+    private fun safeTitle(title: String): String {
+        return if (title.isNullOrEmpty()) {
+            "[No Title]"
+        } else {
+            title
+        }
     }
 
     inner class ItemHolder(v: View) : RecyclerView.ViewHolder(v) {
