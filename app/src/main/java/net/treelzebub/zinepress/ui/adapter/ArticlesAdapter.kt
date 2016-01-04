@@ -1,10 +1,12 @@
 package net.treelzebub.zinepress.ui.adapter
 
+import android.support.v7.widget.AppCompatCheckBox
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.bindView
+import net.treelzebub.zinepress.ZineArticles
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.api.model.PocketArticle
 import net.treelzebub.zinepress.util.ToastUtils
@@ -27,10 +29,22 @@ class ArticlesAdapter : RecyclerView.Adapter<ArticlesAdapter.ItemHolder> {
 
     override fun onBindViewHolder(holder: ArticlesAdapter.ItemHolder, position: Int) {
         val article = list.elementAt(position)
+        if (article.url in ZineArticles.list()) {
+            holder.checkbox.isChecked = true
+        }
         holder.title.text = safeTitle(article.title)
         holder.url.text   = article.originalUrl
-        holder.itemView.setOnClickListener {
+        holder.item.setOnClickListener {
+            holder.checkbox.let { it.isChecked = !it.isChecked }
             ToastUtils.show(holder.itemView.context, article.url)
+        }
+        holder.checkbox.setOnCheckedChangeListener {
+            box, isChecked ->
+            if (isChecked) {
+                ZineArticles.add(article.url)
+            } else {
+                ZineArticles.remove(article.url)
+            }
         }
     }
 
@@ -55,7 +69,9 @@ class ArticlesAdapter : RecyclerView.Adapter<ArticlesAdapter.ItemHolder> {
     }
 
     inner class ItemHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val title: TextView by bindView(R.id.title)
-        val url:   TextView by bindView(R.id.url)
+        val item:  View                     by bindView(R.id.item)
+        val title: TextView                 by bindView(R.id.title)
+        val url:   TextView                 by bindView(R.id.url)
+        val checkbox: AppCompatCheckBox     by bindView(R.id.checkbox)
     }
 }

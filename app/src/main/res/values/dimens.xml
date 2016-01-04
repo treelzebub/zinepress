@@ -13,4 +13,5 @@
     <dimen name="margin_normal">12dp</dimen>
 
     <dimen name="article_item_height">64dp</dimen>
+    <dimen name="checkbox">24dp</dimen>
 </resources>
