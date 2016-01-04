@@ -6,6 +6,7 @@ import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import net.treelzebub.zinepress.Constants
@@ -69,6 +70,7 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
     }
 
     private fun setup() {
+        recycler.layoutManager = LinearLayoutManager(this)
         fab.setOnClickListener {
             Snackbar.make(it, "Do some shit", Snackbar.LENGTH_LONG).setAction("Action", null).show()
         }

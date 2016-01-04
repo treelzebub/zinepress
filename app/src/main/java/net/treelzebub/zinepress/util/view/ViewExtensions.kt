@@ -1,10 +1,13 @@
 package net.treelzebub.zinepress.util.view
 
+import android.view.LayoutInflater
 import android.view.View
 
 /**
  * Created by Tre Murillo on 1/2/16
  */
+val View.inflater: LayoutInflater get() = LayoutInflater.from(this.context)
+
 fun View.setVisible() { visibility = View.VISIBLE }
 
 fun View.setInvisible() { visibility = View.INVISIBLE }

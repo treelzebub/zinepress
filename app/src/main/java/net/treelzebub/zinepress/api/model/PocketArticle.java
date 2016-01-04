@@ -28,7 +28,7 @@ public class PocketArticle {
 
     public String getUrl() {
         return "https://getpocket/a/read/" + id;
-    } 
+    }
 
     public long getId() {
         return id;
