@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.bindView
-import net.treelzebub.zinepress.ZineArticles
+import net.treelzebub.zinepress.zine.ZineArticles
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.api.model.PocketArticle
 import net.treelzebub.zinepress.util.ToastUtils

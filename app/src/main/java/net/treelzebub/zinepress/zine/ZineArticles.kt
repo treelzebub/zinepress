@@ -1,4 +1,4 @@
-package net.treelzebub.zinepress
+package net.treelzebub.zinepress.zine
 
 import java.util.ArrayList
 

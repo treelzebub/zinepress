@@ -14,7 +14,7 @@ import net.treelzebub.zinepress.Constants
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.api.PocketApiFactory
 import net.treelzebub.zinepress.auth.PocketTokenManager
-import net.treelzebub.zinepress.ZineArticles
+import net.treelzebub.zinepress.zine.ZineArticles
 import net.treelzebub.zinepress.auth.model.AuthedRequestBody
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
 
