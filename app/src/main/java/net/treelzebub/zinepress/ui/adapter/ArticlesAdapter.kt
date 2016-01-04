@@ -18,6 +18,7 @@ class ArticlesAdapter(val map: Map<String, PocketArticle>) : RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val article =
+        val article = map.values.elementAt(position)
+
     }
 }

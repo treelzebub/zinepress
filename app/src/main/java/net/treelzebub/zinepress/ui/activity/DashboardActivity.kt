@@ -12,11 +12,11 @@ import net.treelzebub.zinepress.Constants
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.api.PocketApiFactory
 import net.treelzebub.zinepress.auth.PocketTokenManager
-import net.treelzebub.zinepress.auth.model.GetAuthedRequestBody
 import rx.android.schedulers.AndroidSchedulers
 
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.content_dashboard.*
+import net.treelzebub.zinepress.auth.model.AuthedRequestBody
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
 import kotlinx.android.synthetic.main.activity_dashboard.drawer_layout as drawer
 import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
@@ -33,6 +33,9 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
         setSupportActionBar(toolbar)
         setup()
         reload()
+        val wvSettings = web_view.settings
+        wvSettings.builtInZoomControls = true
+        wvSettings.javaScriptEnabled   = true
     }
 
     override fun onBackPressed() {
@@ -98,7 +101,7 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
 
     private fun loadArticles(token: String) {
         val articles = PocketApiFactory.newApiService().getArticles(
-                GetAuthedRequestBody(token, Constants.CONSUMER_KEY, Constants.CONTENT_TYPE_ARTICLE))
+                AuthedRequestBody(Constants.CONSUMER_KEY, token))
         articles.observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     recycler.adapter = ArticlesAdapter(it.map)

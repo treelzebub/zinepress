@@ -22,15 +22,15 @@ public class PocketArticle {
         this.url = url;
     }
 
-    String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    String getUrl() {
+    public String getUrl() {
         return url;
     }
 
-    long getId() {
+    public long getId() {
         return id;
     }
 }

@@ -17,5 +17,4 @@ open class AuthedRequestBody {
         this.consumerKey = consumerKey
         this.accessToken = accessToken
     }
-
 }

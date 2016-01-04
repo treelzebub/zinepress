@@ -30,6 +30,6 @@ interface PocketApi {
 
     // Authed Requests
     @POST("/v3/get")
-    @Headers("Content-Type: application/json", "X-Accept: application/json", "contentType: article")
-    fun getArticles(@Body body: GetAuthedRequestBody): Observable<PocketArticleResponse>
+    @Headers("Content-Type: application/json", "X-Accept: application/json")
+    fun getArticles(@Body body: AuthedRequestBody): Observable<PocketArticleResponse>
 }
