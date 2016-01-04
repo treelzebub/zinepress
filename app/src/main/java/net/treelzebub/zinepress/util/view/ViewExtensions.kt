@@ -1,4 +1,4 @@
-package net.treelzebub.zinepress.util
+package net.treelzebub.zinepress.util.view
 
 import android.view.View
 

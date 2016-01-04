@@ -27,10 +27,14 @@ public class PocketArticle {
     }
 
     public String getUrl() {
-        return url;
-    }
+        return "https://getpocket/a/read/" + id;
+    } 
 
     public long getId() {
         return id;
+    }
+
+    public String getOriginalUrl() {
+        return url;
     }
 }

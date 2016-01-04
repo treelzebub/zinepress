@@ -33,9 +33,6 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
         setSupportActionBar(toolbar)
         setup()
         reload()
-        val wvSettings = web_view.settings
-        wvSettings.builtInZoomControls = true
-        wvSettings.javaScriptEnabled   = true
     }
 
     override fun onBackPressed() {

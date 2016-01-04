@@ -8,7 +8,7 @@ import net.treelzebub.zinepress.Constants
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.auth.PocketAuthCodeGrant
 import net.treelzebub.zinepress.auth.PocketTokenManager
-import net.treelzebub.zinepress.util.setGone
+import net.treelzebub.zinepress.util.view.setGone
 import rx.android.lifecycle.LifecycleObservable
 import rx.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_login.temp_text as tempText
