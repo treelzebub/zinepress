@@ -1,6 +1,9 @@
 
 # Created by https://www.gitignore.io/api/java,android,intellij,gradle
 
+### Apple ###
+.DS_Store
+
 ### Java ###
 *.class
 

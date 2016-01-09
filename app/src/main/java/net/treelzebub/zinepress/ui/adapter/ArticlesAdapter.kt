@@ -9,7 +9,7 @@ import butterknife.bindView
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.api.model.PocketArticle
 import net.treelzebub.zinepress.util.ToastUtils
-import net.treelzebub.zinepress.util.view.inflater
+import net.treelzebub.zinepress.util.extensions.inflater
 import net.treelzebub.zinepress.zine.SelectedArticles
 
 /**
