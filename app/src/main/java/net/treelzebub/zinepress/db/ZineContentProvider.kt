@@ -9,19 +9,29 @@ import android.database.sqlite.SQLiteDatabaseLockedException
 import android.database.sqlite.SQLiteException
 import android.net.Uri
 import android.util.Log
+import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.db.ZineCols.*
+import net.treelzebub.zinepress.util.BaseInjection
 import kotlin.properties.Delegates
 
 /**
  * Created by Tre Murillo on 1/8/16
  */
-class ZineContentProvider(context: Context) : ContentProvider() {
+class ZineContentProvider(context: Context = BaseInjection.context) : ContentProvider() {
 
     companion object {
         val TAG = ZineContentProvider::class.java.simpleName
+        fun uri(c: Context = BaseInjection.context, query: String? = null): Uri {
+            return Uri.Builder()
+                .scheme("content")
+                .authority(c.getString(R.string.authority_zines))
+                .query(query)
+                .build()
+        }
     }
 
     private val helper = ZineSQLiteHelper(context)
+
     private var readDb: SQLiteDatabase  by Delegates.notNull()
     private var writeDb: SQLiteDatabase by Delegates.notNull()
 
