@@ -9,18 +9,17 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import rx.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.app_bar_dashboard.*
+import kotlinx.android.synthetic.main.content_dashboard.*
 import net.treelzebub.zinepress.Constants
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.api.PocketApiFactory
 import net.treelzebub.zinepress.auth.PocketTokenManager
-import net.treelzebub.zinepress.zine.SelectedArticles
 import net.treelzebub.zinepress.auth.model.AuthedRequestBody
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
-
-import kotlinx.android.synthetic.main.app_bar_dashboard.*
-import kotlinx.android.synthetic.main.content_dashboard.*
 import net.treelzebub.zinepress.zine.EpubGenerator
+import net.treelzebub.zinepress.zine.SelectedArticles
+import rx.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_dashboard.drawer_layout as drawer
 import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
 

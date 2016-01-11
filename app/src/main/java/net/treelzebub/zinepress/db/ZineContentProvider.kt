@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteException
 import android.net.Uri
 import android.util.Log
 import net.treelzebub.zinepress.R
-import net.treelzebub.zinepress.db.ZineCols.*
+import net.treelzebub.zinepress.db.ZineCols._TABLE
 import net.treelzebub.zinepress.util.BaseInjection
 import kotlin.properties.Delegates
 
