@@ -1,5 +1,7 @@
 package net.treelzebub.zinepress.zine;
 
+import org.joda.time.LocalDate;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,14 +12,20 @@ import nl.siegmann.epublib.domain.Resource;
  */
 public class Zine implements Serializable {
 
-    private String title;
-    private Resource coverImage;
+    private Long              date;
+    private String            title;
+    private Resource          coverImage;
     private List<ZineArticle> zineArticles;
 
-    public Zine(String title, Resource coverImage, List<ZineArticle> zineArticles) {
-        this.title = title;
-        this.coverImage = coverImage;
+    public Zine(Long date, String title, Resource coverImage, List<ZineArticle> zineArticles) {
+        this.date         = date;
+        this.title        = title;
+        this.coverImage   = coverImage;
         this.zineArticles = zineArticles;
+    }
+
+    public Long getDate() {
+        return date;
     }
 
     public String getTitle() {

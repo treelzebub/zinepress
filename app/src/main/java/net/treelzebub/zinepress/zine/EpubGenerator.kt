@@ -31,7 +31,7 @@ object EpubGenerator {
                 zineArticles.add(ZineArticle(article.url, article.title, rawHtml))
                 Log.d("RAW HTML", rawHtml)
         }
-        return Zine(null, null, zineArticles)
+        return Zine(null, null, null, zineArticles)
     }
 
     private fun handleCallback(url: String): String {

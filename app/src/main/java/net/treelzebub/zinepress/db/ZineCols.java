@@ -10,4 +10,5 @@ public interface ZineCols extends BaseColumns {
 
     String TITLE    = "title";
     String ZINE     = "zine";
+    String DATE     = "date";
 }

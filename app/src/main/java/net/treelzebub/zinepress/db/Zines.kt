@@ -1,6 +1,7 @@
 package net.treelzebub.zinepress.db
 
 import android.content.Context
+import android.database.Cursor
 import net.treelzebub.zinepress.util.BaseInjection
 
 /**
@@ -22,7 +23,10 @@ interface Zines {
 
     val context: Context
 
+    fun all(): List<IZine>
     fun query(): ZineQuery
+    fun cursor(query: ZineQuery): Cursor
+    fun list(query: ZineQuery): List<IZine>
     fun write(): ZineWriter
     fun listen(listener: ZineListener)
     fun unlisten(listener: ZineListener)

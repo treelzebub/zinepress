@@ -17,7 +17,7 @@ import kotlin.properties.Delegates
 /**
  * Created by Tre Murillo on 1/8/16
  */
-class ZineContentProvider(context: Context = BaseInjection.context) : ContentProvider() {
+class ZineContentProvider : ContentProvider() {
 
     companion object {
         val TAG = ZineContentProvider::class.java.simpleName
@@ -30,12 +30,12 @@ class ZineContentProvider(context: Context = BaseInjection.context) : ContentPro
         }
     }
 
-    private val helper = ZineSQLiteHelper(context)
-
-    private var readDb: SQLiteDatabase  by Delegates.notNull()
-    private var writeDb: SQLiteDatabase by Delegates.notNull()
+    private var helper: ZineSQLiteHelper by Delegates.notNull()
+    private var readDb: SQLiteDatabase   by Delegates.notNull()
+    private var writeDb: SQLiteDatabase  by Delegates.notNull()
 
     override fun onCreate(): Boolean {
+        helper = ZineSQLiteHelper(context)
         readDb  = helper.readableDatabase
         writeDb = helper.writableDatabase
         return true

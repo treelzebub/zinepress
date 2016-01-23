@@ -16,18 +16,13 @@ class ZineSQLiteHelper(context: Context) :
         const val DB_NAME = "zinepress.db"
     }
 
-    /*DATABASE_CREATE = "create table "
-      + TABLE_COMMENTS + "(" + COLUMN_ID
-      + " integer primary key autoincrement, " + COLUMN_COMMENT
-      + " text not null);";*/
-
     override fun onCreate(db: SQLiteDatabase) {
-        val cols = "$_ID INTEGER PRIMARY KEY AUTOINCREMENT, $TITLE TEXT, $ZINE BLOB"
-        db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE ($cols)")
+        val cols = "$_ID INTEGER PRIMARY KEY AUTOINCREMENT, $DATE INTEGER, $TITLE TEXT, $ZINE BLOB"
+        db.execSQL("CREATE TABLE IF NOT EXISTS $_TABLE ($cols)")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS '$TABLE'")
+        db.execSQL("DROP TABLE IF EXISTS '$_TABLE'")
         onCreate(db)
     }
 
