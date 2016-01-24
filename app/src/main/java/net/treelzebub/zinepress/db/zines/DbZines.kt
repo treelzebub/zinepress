@@ -1,8 +1,9 @@
-package net.treelzebub.zinepress.db
+package net.treelzebub.zinepress.db.zines
 
 import android.content.Context
 import android.database.Cursor
 import android.support.v4.database.DatabaseUtilsCompat
+import net.treelzebub.zinepress.db.ZineContentProvider
 import net.treelzebub.zinepress.util.listAndClose
 import net.treelzebub.zinepress.util.pairOf
 import java.util.concurrent.ConcurrentLinkedQueue

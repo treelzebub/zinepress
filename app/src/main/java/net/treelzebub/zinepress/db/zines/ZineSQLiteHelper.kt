@@ -1,9 +1,9 @@
-package net.treelzebub.zinepress.db
+package net.treelzebub.zinepress.db.zines
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import net.treelzebub.zinepress.db.ZineCols.*
+import net.treelzebub.zinepress.db.zines.ZineCols.*
 
 /**
  * Created by Tre Murillo on 1/8/16

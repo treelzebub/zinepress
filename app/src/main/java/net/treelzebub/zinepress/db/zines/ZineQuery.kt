@@ -1,6 +1,7 @@
-package net.treelzebub.zinepress.db
+package net.treelzebub.zinepress.db.zines
 
 import android.database.Cursor
+import net.treelzebub.zinepress.db.ZineContentProvider
 import net.treelzebub.zinepress.util.listAndClose
 
 /**

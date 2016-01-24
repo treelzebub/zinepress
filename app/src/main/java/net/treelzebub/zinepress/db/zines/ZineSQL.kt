@@ -1,4 +1,4 @@
-package net.treelzebub.zinepress.db
+package net.treelzebub.zinepress.db.zines
 
 import android.content.ContentValues
 import net.treelzebub.zinepress.util.extensions.maybePut
