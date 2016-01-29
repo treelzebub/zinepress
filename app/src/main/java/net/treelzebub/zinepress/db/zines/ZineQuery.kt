@@ -1,33 +1,28 @@
 package net.treelzebub.zinepress.db.zines
 
 import android.database.Cursor
+import net.treelzebub.zinepress.db.IQuery
 import net.treelzebub.zinepress.db.ZineContentProvider
+import net.treelzebub.zinepress.db.ZinepressDatabase
 import net.treelzebub.zinepress.util.listAndClose
 
 /**
  * Created by Tre Murillo on 1/8/16
  */
-class ZineQuery(val parent: Zines) {
+class ZineQuery(override val parent: DbZines) : IQuery<IZine> {
 
-    var query: String? = null
-        private set
-
-    fun contains(query: String?): ZineQuery = apply {
-        this.query = query
-    }
-
-    fun list(): List<DbZine> {
+    override fun list(): List<DbZine> {
         return cursor().listAndClose { DbZine(it) }
     }
 
-    fun cursor(): Cursor {
+    override fun cursor(): Cursor {
         return parent.context.contentResolver
                 .query(ZineContentProvider.uri(),
                         null, null, null,
-                        "${ZineCols._ID} DESC")
+                        "${ZineCols.DATE} DESC")
     }
 
-    fun getList(): List<IZine> {
-        return parent.list(this)
+    override fun selection(): Pair<String, Array<String>> {
+        throw UnsupportedOperationException()
     }
 }

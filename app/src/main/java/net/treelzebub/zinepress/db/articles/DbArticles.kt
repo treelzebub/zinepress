@@ -1,4 +1,4 @@
-package net.treelzebub.zinepress.db.zines
+package net.treelzebub.zinepress.db.articles
 
 import android.content.Context
 import android.database.Cursor
@@ -6,12 +6,13 @@ import android.net.Uri
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.db.IQuery
 import net.treelzebub.zinepress.db.ZinepressDatabase
+import net.treelzebub.zinepress.db.zines.DbZines
 import net.treelzebub.zinepress.util.BaseInjection
 
 /**
- * Created by Tre Murillo on 1/8/16
+ * Created by Tre Murillo on 1/28/16
  */
-class DbZines(override val context: Context) : ZinepressDatabase<IZine> {
+class DbArticles(override val context: Context) : ZinepressDatabase<IArticle> {
 
     companion object {
         private var singleton: DbZines? = null
@@ -27,19 +28,18 @@ class DbZines(override val context: Context) : ZinepressDatabase<IZine> {
         fun uri(c: Context = BaseInjection.context): Uri {
             return Uri.Builder()
                     .scheme("content")
-                    .authority(c.getString(R.id.authority_zines))
+                    .authority(c.getString(R.id.authority_articles))
                     .build()
         }
     }
 
-    override fun write(): ZineWriter = ZineWriter(this)
+    override fun write(): ArticleWriter = ArticleWriter(this)
 
-    override fun all(): List<IZine> = query().list()
+    override fun all(): List<IArticle> = query().list()
 
-    override fun cursor(query: IQuery<IZine>): Cursor = query.cursor()
+    override fun query(): ArticleQuery = ArticleQuery(this)
 
-    override fun list(query: IQuery<IZine>): List<IZine> = query.list()
+    override fun cursor(query: IQuery<IArticle>): Cursor = query.cursor()
 
-    override fun query(): ZineQuery = ZineQuery(this)
-
+    override fun list(query: IQuery<IArticle>): List<IArticle> = query.list()
 }

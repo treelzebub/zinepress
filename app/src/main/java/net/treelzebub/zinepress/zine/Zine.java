@@ -1,7 +1,5 @@
 package net.treelzebub.zinepress.zine;
 
-import org.joda.time.LocalDate;
-
 import java.io.Serializable;
 import java.util.List;
 
