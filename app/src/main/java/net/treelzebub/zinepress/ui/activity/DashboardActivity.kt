@@ -1,11 +1,11 @@
 package net.treelzebub.zinepress.ui.activity
 
-import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
@@ -16,8 +16,6 @@ import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.api.PocketApiFactory
 import net.treelzebub.zinepress.auth.model.AuthedRequestBody
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
-import net.treelzebub.zinepress.util.dialog.BaseAlertDialogFragment
-import net.treelzebub.zinepress.util.dialog.DataLossAlertFragment
 import net.treelzebub.zinepress.zine.EpubGenerator
 import net.treelzebub.zinepress.zine.SelectedArticles
 import rx.android.schedulers.AndroidSchedulers
@@ -112,6 +110,16 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
     }
 
     private fun warnDataLoss() {
-        DataLossAlertFragment().show(fragmentManager, "warnDataLoss")
+        AlertDialog.Builder(this)
+        .setTitle(R.string.alert_data_loss_title)
+        .setMessage(R.string.alert_data_loss_message)
+        .setPositiveButton(R.string.yes, {
+            dialog, which ->
+            // TODO save
+        })
+        .setNegativeButton(R.string.no, {
+            dialog, which ->
+            onBackPressed()
+        })
     }
 }

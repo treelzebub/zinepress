@@ -15,7 +15,7 @@ import android.view.ViewGroup
 /**
  * Created by Tre Murillo on 1/30/16
  */
-abstract class BaseAlertDialogFragment(@LayoutRes val layout: Int,
+abstract class BaseDialogFragment(@LayoutRes val layout: Int,
                                        @StringRes val title: Int,
                                        @StringRes val message: Int,
                                        @StringRes val positive: Int?,
@@ -59,7 +59,7 @@ abstract class BaseAlertDialogFragment(@LayoutRes val layout: Int,
     }
 
     protected open fun onNeutral(v: View?) {
-        // Override
+        onButton(v, 0)
     }
 
     protected open fun onNegative(v: View?) {
