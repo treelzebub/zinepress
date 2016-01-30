@@ -11,11 +11,10 @@ import kotlin.properties.Delegates
  */
 class MainActivity : BaseRxActivity() {
 
-    private var tokenManager: PocketTokenManager by Delegates.notNull()
-
+//TODO branch on isLoggedIn here or in BaseRxActivity?
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        tokenManager = PocketTokenManager.from(this)
+        val tokenManager = PocketTokenManager.from(this)
         tokenManager.storage.hasAccessToken()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { loggedIn ->

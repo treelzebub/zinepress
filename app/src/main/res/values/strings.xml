@@ -8,7 +8,12 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="alert_data_loss_title">Warning!</string>
+    <string name="alert_data_loss_message">Leave before saving changes?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
+    // Pref
     <string name="key_prefs_file">zinepress.prefs</string>
     <string name="pref_request_token">pref_request_token</string>
     <string name="pref_access_token">pref_access_token</string>

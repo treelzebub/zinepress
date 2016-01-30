@@ -1,6 +1,6 @@
 package net.treelzebub.zinepress.ui.activity
 
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -14,15 +14,15 @@ import kotlinx.android.synthetic.main.content_dashboard.*
 import net.treelzebub.zinepress.Constants
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.api.PocketApiFactory
-import net.treelzebub.zinepress.auth.PocketTokenManager
 import net.treelzebub.zinepress.auth.model.AuthedRequestBody
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
+import net.treelzebub.zinepress.util.dialog.BaseAlertDialogFragment
+import net.treelzebub.zinepress.util.dialog.DataLossAlertFragment
 import net.treelzebub.zinepress.zine.EpubGenerator
 import net.treelzebub.zinepress.zine.SelectedArticles
 import rx.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_dashboard.drawer_layout as drawer
 import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
-
 
 /**
  * Created by Tre Murillo on 1/2/16
@@ -34,7 +34,7 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
         setContentView(R.layout.activity_dashboard)
         setSupportActionBar(toolbar)
         setup()
-        reload()
+        reload(token)
     }
 
     override fun onPause() {
@@ -94,38 +94,24 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
         navView.setNavigationItemSelectedListener(this)
     }
 
-    private fun warnDataLossOrDo(fn: () -> Unit) {
-        if (SelectedArticles.list().isNotEmpty()) {
-            // Pop up data-loss warning
-        } else {
-            fn()
-        }
-    }
-
-    //TODO move this stuff out of activity...
-    private fun reload() {
-        val storage = PocketTokenManager.from(this).storage
-        storage.hasAccessToken()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { loggedIn ->
-                    if (loggedIn) {
-                        storage.storedAccessToken
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe {
-                                    loadArticles(it.accessToken)
-                                }
-                    } else {
-                        startActivity(Intent(this, LoginActivity::class.java))
-                    }
-                }
-    }
-
-    private fun loadArticles(token: String) {
+    private fun reload(token: String) {
         val articles = PocketApiFactory.newApiService().getArticles(
                 AuthedRequestBody(Constants.CONSUMER_KEY, token))
         articles.observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     recycler.adapter = ArticlesAdapter(it.map)
                 }
+    }
+
+    private fun warnDataLossOrDo(fn: () -> Unit) {
+        if (SelectedArticles.list().isNotEmpty()) {
+            warnDataLoss()
+        } else {
+            fn()
+        }
+    }
+
+    private fun warnDataLoss() {
+        DataLossAlertFragment().show(fragmentManager, "warnDataLoss")
     }
 }
