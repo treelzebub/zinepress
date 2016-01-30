@@ -6,7 +6,6 @@ import android.net.Uri
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.db.IQuery
 import net.treelzebub.zinepress.db.ZinepressDatabase
-import net.treelzebub.zinepress.db.zines.DbZines
 import net.treelzebub.zinepress.util.BaseInjection
 
 /**
@@ -15,12 +14,12 @@ import net.treelzebub.zinepress.util.BaseInjection
 class DbArticles(override val context: Context) : ZinepressDatabase<IArticle> {
 
     companion object {
-        private var singleton: DbZines? = null
+        private var singleton: DbArticles? = null
 
         @Synchronized
-        fun get(c: Context = BaseInjection.context): DbZines {
+        fun get(c: Context = BaseInjection.context): DbArticles {
             if (singleton == null) {
-                singleton = DbZines(c)
+                singleton = DbArticles(c)
             }
             return singleton!!
         }

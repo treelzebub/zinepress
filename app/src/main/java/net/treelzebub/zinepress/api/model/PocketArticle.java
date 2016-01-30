@@ -2,13 +2,18 @@ package net.treelzebub.zinepress.api.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import net.treelzebub.zinepress.db.articles.IArticle;
+
 /**
  * Created by Tre Murillo on 1/3/16
  */
-public class PocketArticle {
+public class PocketArticle implements IArticle {
 
     @SerializedName("item_id")
-    private final long id;
+    long id;
+
+    @SerializedName("date")
+    private final long date;
 
     @SerializedName("resolved_title")
     private final String title;
@@ -16,22 +21,23 @@ public class PocketArticle {
     @SerializedName("resolved_url")
     private final String originalUrl;
 
-    PocketArticle(long id, String title, String url) {
+    PocketArticle(long id, long date, String title, String url) {
         this.id          = id;
+        this.date        = date;
         this.title       = title;
         this.originalUrl = url;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getUrl() {
-        return "https://getpocket/a/read/" + id;
-    }
-
     public long getId() {
         return id;
+    }
+
+    public long getDate() {
+        return date;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getOriginalUrl() {

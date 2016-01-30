@@ -10,5 +10,6 @@ class ZinePressApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         BaseInjection.context = this.applicationContext
+        ZinePressInit.init(this)
     }
 }

@@ -2,7 +2,7 @@ package net.treelzebub.zinepress.api.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created by Tre Murillo on 1/3/16
@@ -10,13 +10,13 @@ import java.util.Map;
 public class PocketArticleResponse {
 
     @SerializedName("list")
-    private final Map<String, PocketArticle> list;
+    private final List<PocketArticle> articles;
 
-    PocketArticleResponse(Map<String, PocketArticle> list) {
-        this.list = list;
+    PocketArticleResponse(List<PocketArticle> articles) {
+        this.articles = articles;
     }
 
-    public Map<String, PocketArticle> getMap() {
-        return list;
+    public List<PocketArticle> getArticles() {
+        return articles;
     }
 }
