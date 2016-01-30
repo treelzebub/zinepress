@@ -1,5 +1,7 @@
 package net.treelzebub.zinepress.api.model;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import net.treelzebub.zinepress.db.articles.IArticle;
@@ -36,10 +38,12 @@ public class PocketArticle implements IArticle {
         return date;
     }
 
+    @NonNull
     public String getTitle() {
         return title;
     }
 
+    @NonNull
     public String getOriginalUrl() {
         return originalUrl;
     }

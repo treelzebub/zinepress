@@ -22,7 +22,9 @@ object ZinePressInit {
                                 .getArticles(AuthedRequestBody(Constants.CONSUMER_KEY, it.accessToken))
                         articles.observeOn(AndroidSchedulers.handlerThread(Handler()))
                                 .subscribe {
-                                    DbArticles.get(c).write().bulkInsert(DbArticles.uri(c), *it.articles.toTypedArray())
+                                    DbArticles.get(c)
+                                            .write()
+                                            .bulkInsert(DbArticles.uri(c), *it.articles.toTypedArray())
                                 }
                     }
         }

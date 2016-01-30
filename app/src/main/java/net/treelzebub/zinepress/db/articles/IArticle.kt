@@ -8,8 +8,4 @@ interface IArticle {
     val date: Long
     val title: String
     val originalUrl: String
-
-    fun pocketUrl(): String {
-        return "https://getpocket/a/read/" + id
-    }
 }
