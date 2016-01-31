@@ -19,8 +19,4 @@ class DbArticle : IArticle {
         title       = c.getString(++i)
         originalUrl = c.getString(++i)
     }
-
-    fun pocketUrl(): String {
-        return "https://getpocket/a/read/$id"
-    }
 }

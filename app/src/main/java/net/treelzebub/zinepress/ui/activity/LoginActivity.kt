@@ -56,7 +56,7 @@ class LoginActivity : BaseRxActivity() {
 
     private fun accessToken(code: String) {
         val manager = PocketTokenManager.from(this)
-        LifecycleObservable.bindActivityLifecycle(lifecycle(), manager.accessToken(code))
+        LifecycleObservable.bindActivityLifecycle(lifecycle(), manager.grantAccessToken(code))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     manager.storage.storeAccessToken(it)

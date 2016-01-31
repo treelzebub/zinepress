@@ -20,7 +20,7 @@ class PocketTokenManager(val c: Context, storage: OAuth2AccessTokenStorage<OAuth
 
     companion object {
         fun from(c: Context): PocketTokenManager {
-            val prefs   = PrefsUtils.getPrefs(c)
+            val prefs = PrefsUtils.getPrefs(c)
             val storage = SharedPreferencesOAuth2AccessTokenStorage<OAuth2AccessToken>(prefs, OAuth2AccessToken::class.java)
             return PocketTokenManager(c, storage)
         }
@@ -35,16 +35,10 @@ class PocketTokenManager(val c: Context, storage: OAuth2AccessTokenStorage<OAuth
         return "${Constants.AUTHORIZE_URL}?request_token=$code&redirect_uri=${Constants.REDIRECT_URI}"
     }
 
-    fun accessToken(code: String): Observable<OAuth2AccessToken> {
+    fun grantAccessToken(code: String): Observable<OAuth2AccessToken> {
         val grant = PocketAuthCodeGrant()
         grant.redirectUri = Constants.REDIRECT_URI
         return grant.exchangeTokenUsingCode(code)
-//        return PocketApiFactory.newApiService().newAccessToken(AccessTokenRequestBody(code, Constants.CONSUMER_KEY, Constants.REDIRECT_URI))
-    }
-
-    val validAccessToken: Observable<String> get() {
-        val grant = PocketRefreshAccessTokenGrant(Constants.CONSUMER_KEY, Constants.REDIRECT_URI)
-        return super.getValidAccessToken(grant).map { it.tokenType + " " + it.accessToken }
     }
 
     // Persist tokens
@@ -66,5 +60,10 @@ class PocketTokenManager(val c: Context, storage: OAuth2AccessTokenStorage<OAuth
     fun loadAccessToken(): String {
         val pref = PrefsUtils.userPref(c.getString(R.string.pref_access_token), String::class.java)
         return pref.get(c)!!
+    }
+
+    fun getValidAccessToken(): Observable<String> {
+        val grant = PocketRefreshAccessTokenGrant(Constants.CONSUMER_KEY, Constants.REDIRECT_URI)
+        return super.getValidAccessToken(grant).map { token -> token.accessToken }
     }
 }
