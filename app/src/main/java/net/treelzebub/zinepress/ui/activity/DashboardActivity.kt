@@ -15,6 +15,7 @@ import net.treelzebub.zinepress.Constants
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.api.PocketApiFactory
 import net.treelzebub.zinepress.auth.model.AuthedRequestBody
+import net.treelzebub.zinepress.db.articles.IArticle
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
 import net.treelzebub.zinepress.zine.EpubGenerator
 import net.treelzebub.zinepress.zine.SelectedArticles
@@ -27,12 +28,21 @@ import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
  */
 class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    private val adapter = ArticlesAdapter(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        recycler.adapter = adapter
+        reload(token)
+        if (savedInstanceState != null) {
+            val selectedArticles = savedInstanceState.getSerializable("selected_articles")
+            if (selectedArticles != null) {
+                SelectedArticles.articles.addAll(selectedArticles as Set<IArticle>)
+            }
+        }
         setContentView(R.layout.activity_dashboard)
         setSupportActionBar(toolbar)
         setup()
-        reload(token)
     }
 
     override fun onPause() {
@@ -59,27 +69,40 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> true
-            else                 -> super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_camera     -> {}
-            R.id.nav_gallery    -> {}
-            R.id.nav_slideshow  -> {}
-            R.id.nav_manage     -> {}
-            R.id.nav_share      -> {}
-            R.id.nav_send       -> {}
+            R.id.nav_camera -> {
+            }
+            R.id.nav_gallery -> {
+            }
+            R.id.nav_slideshow -> {
+            }
+            R.id.nav_manage -> {
+            }
+            R.id.nav_share -> {
+            }
+            R.id.nav_send -> {
+            }
         }
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (SelectedArticles.articles.isNotEmpty()) {
+            outState.putSerializable("selected_articles", SelectedArticles.articles)
+        }
+    }
+
     private fun setup() {
         recycler.layoutManager = LinearLayoutManager(this)
         fab.setOnClickListener {
-            if (SelectedArticles.list().isEmpty()) {
+            if (SelectedArticles.articles.isEmpty()) {
                 Snackbar.make(it, "No articles selected for zine!", Snackbar.LENGTH_LONG).show()
             } else {
                 EpubGenerator.buildBook()
@@ -97,12 +120,12 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
                 AuthedRequestBody(Constants.CONSUMER_KEY, token))
         articles.observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    recycler.adapter = ArticlesAdapter(it.map)
+                    adapter.setList(it.articles)
                 }
     }
 
     private fun warnDataLossOrDo(fn: () -> Unit) {
-        if (SelectedArticles.list().isNotEmpty()) {
+        if (SelectedArticles.articles.isNotEmpty()) {
             warnDataLoss()
         } else {
             fn()
@@ -111,15 +134,15 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
 
     private fun warnDataLoss() {
         AlertDialog.Builder(this)
-        .setTitle(R.string.alert_data_loss_title)
-        .setMessage(R.string.alert_data_loss_message)
-        .setPositiveButton(R.string.yes, {
-            dialog, which ->
-            // TODO save
-        })
-        .setNegativeButton(R.string.no, {
-            dialog, which ->
-            onBackPressed()
-        })
+                .setTitle(R.string.alert_data_loss_title)
+                .setMessage(R.string.alert_data_loss_message)
+                .setPositiveButton(R.string.yes, {
+                    dialog, which ->
+                    dialog.dismiss()
+                })
+                .setNegativeButton(R.string.no, {
+                    dialog, which ->
+                    onBackPressed()
+                })
     }
 }

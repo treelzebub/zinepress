@@ -25,7 +25,7 @@ object EpubGenerator {
 
     private fun createZineFromArticles(): Zine {
         val zineArticles = arrayListOf<ZineArticle>()
-        SelectedArticles.list().forEach {
+        SelectedArticles.set().forEach {
             article ->
                 val rawHtml = handleCallback(article.url)
                 zineArticles.add(ZineArticle(article.url, article.title, rawHtml))

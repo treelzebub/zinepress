@@ -1,6 +1,6 @@
 package net.treelzebub.zinepress.zine
 
-import net.treelzebub.zinepress.api.model.PocketArticle
+import net.treelzebub.zinepress.db.articles.IArticle
 import java.util.*
 
 /**
@@ -8,18 +8,6 @@ import java.util.*
  */
 object SelectedArticles {
 
-    // List of urls to collect as ePub
-    private val articles: ArrayList<PocketArticle> = arrayListOf()
-
-    fun add(article: PocketArticle) {
-        articles.add(article)
-    }
-
-    fun remove(article: PocketArticle) {
-        articles.remove(article)
-    }
-
-    fun list(): List<PocketArticle> {
-        return articles
-    }
+    // Currently selected Articles to collect as ePub
+    val articles: HashSet<IArticle> = hashSetOf()
 }
