@@ -17,6 +17,7 @@ import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.api.PocketApiFactory
 import net.treelzebub.zinepress.auth.PocketTokenManager
 import net.treelzebub.zinepress.auth.model.AuthedRequestBody
+import net.treelzebub.zinepress.db.articles.DbArticles
 import net.treelzebub.zinepress.db.articles.IArticle
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
 import net.treelzebub.zinepress.zine.EpubGenerator
@@ -137,22 +138,18 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
     }
 
     private fun loadArticles() {
-        val articlesObservable = tokenMgr
-                .getValidAccessToken()
-                .concatMap {
-                    token ->
-                    PocketApiFactory.newApiService().getArticles(AuthedRequestBody(Constants.CONSUMER_KEY, token))
-                }
-        bindActivityLifecycle(lifecycle(), articlesObservable)
-                .observeOn(mainThread())
-                .subscribe {
-                    val articles = it.articles
-                    if (articles.isEmpty()) {
-                        handleEmpty()
-                    } else {
-//                        adapter.setList(articles)
-                    }
-                }
+        //TODO try out SQLBrite
+        adapter.setList(DbArticles.get(this).all())
+//        bindActivityLifecycle(lifecycle(), articlesObservable)
+//                .observeOn(mainThread())
+//                .subscribe {
+//                    val articles = it.articles
+//                    if (articles.isEmpty()) {
+//                        handleEmpty()
+//                    } else {
+////                        adapter.setList(articles)
+//                    }
+//                }
     }
 
     private fun showLogin() {

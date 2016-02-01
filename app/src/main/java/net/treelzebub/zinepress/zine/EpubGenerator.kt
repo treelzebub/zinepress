@@ -5,6 +5,7 @@ import com.squareup.okhttp.Callback
 import com.squareup.okhttp.Request
 import com.squareup.okhttp.Response
 import nl.siegmann.epublib.domain.Book
+import org.joda.time.DateTime
 import java.io.IOException
 
 /**
@@ -20,6 +21,7 @@ object EpubGenerator {
         val book = Book()
         val zine = createZineFromArticles()
         book.coverImage = zine.coverImage
+        //TODO
         return book
     }
 
@@ -27,17 +29,18 @@ object EpubGenerator {
         val zineArticles = arrayListOf<ZineArticle>()
         SelectedArticles.articles.forEach {
             article ->
-                val rawHtml = handleCallback(article.pocketUrl())
-                zineArticles.add(ZineArticle(article.pocketUrl(), article.title, rawHtml))
-                Log.d("RAW HTML", rawHtml)
+            val rawHtml = handleCallback(article.originalUrl)
+            zineArticles.add(ZineArticle(article.originalUrl, article.title, rawHtml))
+            Log.d("RAW HTML", rawHtml)
         }
-        return Zine(null, null, null, zineArticles)
+        return Zine(DateTime.now().millis, zineArticles)
     }
 
     private fun handleCallback(url: String): String {
         var body: String = ""
         val callback = object : Callback {
             override fun onFailure(request: Request, e: IOException) {
+                // TODO
                 Log.e("Error handling HtmlGetter callback", e.message)
             }
 

@@ -3,7 +3,6 @@ package net.treelzebub.zinepress.db.zines
 import android.database.Cursor
 import net.treelzebub.zinepress.db.IQuery
 import net.treelzebub.zinepress.db.ZineContentProvider
-import net.treelzebub.zinepress.db.ZinepressDatabase
 import net.treelzebub.zinepress.util.listAndClose
 
 /**

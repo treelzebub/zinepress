@@ -34,7 +34,7 @@ class DbArticles(override val context: Context) : ZinepressDatabase<IArticle> {
 
     override fun write(): ArticleWriter = ArticleWriter(this)
 
-    override fun all(): List<IArticle> = query().list()
+    override fun all(): List<IArticle> = query().list() ?: listOf()
 
     override fun query(): ArticleQuery = ArticleQuery(this)
 
