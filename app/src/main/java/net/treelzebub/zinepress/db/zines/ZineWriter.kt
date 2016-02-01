@@ -3,13 +3,13 @@ package net.treelzebub.zinepress.db.zines
 import android.content.ContentValues
 import android.net.Uri
 import net.treelzebub.zinepress.db.IWriter
-import net.treelzebub.zinepress.db.ZinepressDatabase
+import net.treelzebub.zinepress.db.IDatabase
 import net.treelzebub.zinepress.util.extensions.maybePut
 
 /**
  * Created by Tre Murillo on 1/8/16
  */
-class ZineWriter(override val parent: ZinepressDatabase<IZine>) : IWriter<IZine> {
+class ZineWriter(override val parent: IDatabase<IZine>) : IWriter<IZine> {
 
     private val context = parent.context
 

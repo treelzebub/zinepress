@@ -1,4 +1,4 @@
-package net.treelzebub.zinepress.db
+package net.treelzebub.zinepress.db.zines
 
 import android.content.ContentProvider
 import android.content.ContentValues
@@ -11,7 +11,6 @@ import android.net.Uri
 import android.util.Log
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.db.zines.ZineCols._TABLE
-import net.treelzebub.zinepress.db.zines.ZineSQLiteHelper
 import net.treelzebub.zinepress.util.BaseInjection
 import kotlin.properties.Delegates
 

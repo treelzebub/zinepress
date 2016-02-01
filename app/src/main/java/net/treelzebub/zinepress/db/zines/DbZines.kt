@@ -5,13 +5,13 @@ import android.database.Cursor
 import android.net.Uri
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.db.IQuery
-import net.treelzebub.zinepress.db.ZinepressDatabase
+import net.treelzebub.zinepress.db.IDatabase
 import net.treelzebub.zinepress.util.BaseInjection
 
 /**
  * Created by Tre Murillo on 1/8/16
  */
-class DbZines(override val context: Context) : ZinepressDatabase<IZine> {
+class DbZines(override val context: Context) : IDatabase<IZine> {
 
     companion object {
         private var singleton: DbZines? = null
@@ -27,7 +27,7 @@ class DbZines(override val context: Context) : ZinepressDatabase<IZine> {
         fun uri(c: Context = BaseInjection.context): Uri {
             return Uri.Builder()
                     .scheme("content")
-                    .authority(c.getString(R.id.authority_zines))
+                    .authority(c.getString(R.string.authority_zines))
                     .build()
         }
     }

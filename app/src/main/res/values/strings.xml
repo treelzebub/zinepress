@@ -2,6 +2,7 @@
     <string name="app_name">ZinePress</string>
     <string name="action_settings">Settings</string>
     <string name="authority_zines">net.treelzebub.zinepress.content.zines</string>
+    <string name="authority_articles">net.treelzebub.zinepress.content.articles</string>
 
     <string name="title_activity_dashboard">DashboardActivity</string>
 
