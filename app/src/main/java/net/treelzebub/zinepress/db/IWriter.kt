@@ -9,7 +9,7 @@ import android.net.Uri
 
 interface IWriter<T> {
 
-    val parent: ZinepressDatabase<T>
+    val parent: IDatabase<T>
 
     fun bulkInsert(uri: Uri, vararg items: T): Boolean
     fun addOrUpdate(vararg items: T): Boolean

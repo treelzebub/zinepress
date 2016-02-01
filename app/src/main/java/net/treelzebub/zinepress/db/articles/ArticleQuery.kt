@@ -25,7 +25,7 @@ class ArticleQuery(override val parent: DbArticles) : IQuery<IArticle> {
                 DbArticles.uri(parent.context),
                 null,
                 selection.first, selection.second,
-                "")
+                "${ArticleCols.DATE} DESC")
     }
 
     override fun selection(): Pair<String, Array<String>> {

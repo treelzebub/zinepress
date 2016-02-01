@@ -1,5 +1,6 @@
 package net.treelzebub.zinepress.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -11,15 +12,15 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.content_dashboard.*
-import net.treelzebub.zinepress.Constants
 import net.treelzebub.zinepress.R
-import net.treelzebub.zinepress.api.PocketApiFactory
-import net.treelzebub.zinepress.auth.model.AuthedRequestBody
+import net.treelzebub.zinepress.auth.PocketTokenManager
+import net.treelzebub.zinepress.db.articles.DbArticles
 import net.treelzebub.zinepress.db.articles.IArticle
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
 import net.treelzebub.zinepress.zine.EpubGenerator
 import net.treelzebub.zinepress.zine.SelectedArticles
 import rx.android.schedulers.AndroidSchedulers
+import kotlin.properties.Delegates
 import kotlinx.android.synthetic.main.activity_dashboard.drawer_layout as drawer
 import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
 
@@ -28,21 +29,23 @@ import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
  */
 class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    private var tokenMgr: PocketTokenManager by Delegates.notNull()
+
     private val adapter = ArticlesAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        recycler.adapter = adapter
-        reload(token)
+        setContentView(R.layout.activity_dashboard)
+        tokenMgr = PocketTokenManager.from(this)
+        setSupportActionBar(toolbar)
+        setup()
+        reload()
         if (savedInstanceState != null) {
             val selectedArticles = savedInstanceState.getSerializable("selected_articles")
             if (selectedArticles != null) {
                 SelectedArticles.articles.addAll(selectedArticles as Set<IArticle>)
             }
         }
-        setContentView(R.layout.activity_dashboard)
-        setSupportActionBar(toolbar)
-        setup()
     }
 
     override fun onPause() {
@@ -101,6 +104,7 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
 
     private fun setup() {
         recycler.layoutManager = LinearLayoutManager(this)
+        recycler.adapter = adapter
         fab.setOnClickListener {
             if (SelectedArticles.articles.isEmpty()) {
                 Snackbar.make(it, "No articles selected for zine!", Snackbar.LENGTH_LONG).show()
@@ -115,13 +119,41 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
         navView.setNavigationItemSelectedListener(this)
     }
 
-    private fun reload(token: String) {
-        val articles = PocketApiFactory.newApiService().getArticles(
-                AuthedRequestBody(Constants.CONSUMER_KEY, token))
-        articles.observeOn(AndroidSchedulers.mainThread())
+    private fun reload() {
+        // Check if logged in, refresh articles
+        tokenMgr.storage.hasAccessToken()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    adapter.setList(it.articles)
+                    loggedIn ->
+                    if (loggedIn) {
+                        loadArticles()
+                    } else {
+                        showLogin()
+                    }
                 }
+    }
+
+    private fun loadArticles() {
+        //TODO try out SQLBrite
+        adapter.setList(DbArticles.get(this).all())
+//        bindActivityLifecycle(lifecycle(), articlesObservable)
+//                .observeOn(mainThread())
+//                .subscribe {
+//                    val articles = it.articles
+//                    if (articles.isEmpty()) {
+//                        handleEmpty()
+//                    } else {
+////                        adapter.setList(articles)
+//                    }
+//                }
+    }
+
+    private fun showLogin() {
+        startActivity(Intent(this, LoginActivity::class.java))
+    }
+
+    private fun handleEmpty() {
+        //TODO
     }
 
     private fun warnDataLossOrDo(fn: () -> Unit) {

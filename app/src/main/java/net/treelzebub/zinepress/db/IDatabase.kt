@@ -7,7 +7,7 @@ import net.treelzebub.zinepress.db.zines.ZineQuery
 /**
  * Created by Tre Murillo on 1/8/16
  */
-interface ZinepressDatabase<T> {
+interface IDatabase<T> {
 
     val context: Context
 

@@ -9,7 +9,7 @@ import net.treelzebub.zinepress.util.pairOf
  */
 interface IQuery<T> {
 
-    val parent: ZinepressDatabase<T>
+    val parent: IDatabase<T>
 
     fun list(): List<T>
     fun cursor(): Cursor
