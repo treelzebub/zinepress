@@ -1,5 +1,6 @@
 package net.treelzebub.zinepress.ui.activity
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.webkit.WebView
@@ -34,8 +35,10 @@ class LoginActivity : BaseRxActivity() {
         webView.setWebViewClient(object : WebViewClient() {
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                 if (url.startsWith(Constants.REDIRECT_URI)) {
-                    val manager = PocketTokenManager.from(this@LoginActivity)
-                    accessToken(manager.loadRequestToken())
+                    webView.setGone()
+                    val tokenMgr = PocketTokenManager.from(this@LoginActivity)
+                    storeAccessToken(tokenMgr.loadRequestToken())
+                    startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
                 }
             }
         })
@@ -54,7 +57,7 @@ class LoginActivity : BaseRxActivity() {
                 }
     }
 
-    private fun accessToken(code: String) {
+    private fun storeAccessToken(code: String) {
         val manager = PocketTokenManager.from(this)
         LifecycleObservable.bindActivityLifecycle(lifecycle(), manager.grantAccessToken(code))
                 .observeOn(AndroidSchedulers.mainThread())
