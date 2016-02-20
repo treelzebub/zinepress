@@ -1,4 +1,4 @@
-package net.treelzebub.zinepress.api.model;
+package net.treelzebub.zinepress.net.api.model;
 
 import com.google.gson.annotations.SerializedName;
 

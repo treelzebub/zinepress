@@ -1,7 +1,7 @@
-package net.treelzebub.zinepress.api
+package net.treelzebub.zinepress.net.api
 
 import de.rheinfabrik.heimdall.OAuth2AccessToken
-import net.treelzebub.zinepress.api.model.PocketArticleResponse
+import net.treelzebub.zinepress.net.api.model.PocketArticleResponse
 import net.treelzebub.zinepress.auth.model.*
 import retrofit.http.Body
 import retrofit.http.Headers

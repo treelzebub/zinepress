@@ -1,4 +1,4 @@
-package net.treelzebub.zinepress.api
+package net.treelzebub.zinepress.net.api
 
 import android.content.Context
 

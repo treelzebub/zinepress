@@ -2,7 +2,7 @@ package net.treelzebub.zinepress.auth
 
 import de.rheinfabrik.heimdall.OAuth2AccessToken
 import de.rheinfabrik.heimdall.grants.OAuth2RefreshAccessTokenGrant
-import net.treelzebub.zinepress.api.PocketApiFactory
+import net.treelzebub.zinepress.net.api.PocketApiFactory
 import net.treelzebub.zinepress.auth.model.RefreshTokenRequestBody
 import rx.Observable
 

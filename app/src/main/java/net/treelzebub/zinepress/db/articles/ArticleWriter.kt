@@ -3,6 +3,7 @@ package net.treelzebub.zinepress.db.articles
 import android.content.ContentValues
 import android.net.Uri
 import net.treelzebub.zinepress.db.IWriter
+import net.treelzebub.zinepress.net.api.model.PocketArticle
 import net.treelzebub.zinepress.util.extensions.maybePut
 
 /**
@@ -11,6 +12,10 @@ import net.treelzebub.zinepress.util.extensions.maybePut
 class ArticleWriter(override val parent: DbArticles) : IWriter<IArticle> {
 
     private val context = parent.context
+
+    fun insertAll(uri: Uri, list: List<PocketArticle>): Boolean {
+        return bulkInsert(uri, *list.map { DbArticle(it) }.toTypedArray())
+    }
 
     override fun bulkInsert(uri: Uri, vararg items: IArticle): Boolean {
         val cvs = items.map { toContentValues(it) }
