@@ -1,11 +1,13 @@
 package net.treelzebub.zinepress
 
 import android.content.Context
+import android.util.Log
 import net.treelzebub.zinepress.api.PocketApiFactory
 import net.treelzebub.zinepress.auth.PocketTokenManager
 import net.treelzebub.zinepress.auth.model.AuthedRequestBody
 import net.treelzebub.zinepress.db.articles.DbArticles
 import net.treelzebub.zinepress.db.articles.i
+import net.treelzebub.zinepress.util.TAG
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
@@ -19,6 +21,7 @@ object ZinePressInit {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
+                    Log.d(TAG, "Found token that expires on ${it.expirationDate.toString()}")
                     syncArticles(it.accessToken)
                 }
     }
@@ -29,6 +32,7 @@ object ZinePressInit {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
+                    Log.d(TAG, "Attempting to write ${it.articles.size} Articles.")
                     DbArticles.write(it.articles.map { it.i() })
                 }
     }
