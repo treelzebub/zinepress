@@ -11,13 +11,14 @@ import retrofit.converter.GsonConverter
 object PocketApiFactory {
 
     fun newApiService(): PocketApi {
-        val restAdapterBuilder = RestAdapter.Builder()
+        return RestAdapter.Builder()
                 .setConverter(GsonConverter(Gson()))
                 .setRequestInterceptor {
                     it.addHeader("Content-type", "application/json")
                 }
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setEndpoint(Constants.BASE_URL)
-        return restAdapterBuilder.build().create(PocketApi::class.java)
+                .build()
+                .create(PocketApi::class.java)
     }
 }

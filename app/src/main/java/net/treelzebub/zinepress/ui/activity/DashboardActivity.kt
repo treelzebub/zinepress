@@ -20,7 +20,6 @@ import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
 import net.treelzebub.zinepress.zine.EpubGenerator
 import net.treelzebub.zinepress.zine.SelectedArticles
 import rx.android.schedulers.AndroidSchedulers
-import kotlin.properties.Delegates
 import kotlinx.android.synthetic.main.activity_dashboard.drawer_layout as drawer
 import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
 
@@ -29,23 +28,15 @@ import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
  */
 class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private var tokenMgr: PocketTokenManager by Delegates.notNull()
-
+    private val tokenMgr: PocketTokenManager get() = PocketTokenManager.from(this)
     private val adapter = ArticlesAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        tokenMgr = PocketTokenManager.from(this)
         setSupportActionBar(toolbar)
-        setup()
+        setup(savedInstanceState)
         reload()
-        if (savedInstanceState != null) {
-            val selectedArticles = savedInstanceState.getSerializable("selected_articles")
-            if (selectedArticles != null) {
-                SelectedArticles.articles.addAll(selectedArticles as Set<IArticle>)
-            }
-        }
     }
 
     override fun onPause() {
@@ -102,7 +93,11 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
         }
     }
 
-    private fun setup() {
+    private fun setup(savedInstanceState: Bundle?) {
+        val selectedArticles = savedInstanceState?.getSerializable("selected_articles")
+        if (selectedArticles != null) {
+            SelectedArticles.articles.addAll(selectedArticles as Set<IArticle>)
+        }
         recycler.layoutManager = LinearLayoutManager(this)
         recycler.adapter = adapter
         fab.setOnClickListener {

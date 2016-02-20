@@ -29,7 +29,6 @@ open class BaseRxActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleSubject.onNext(LifecycleEvent.CREATE)
-
     }
 
     override fun onStart() {
