@@ -1,4 +1,4 @@
-package net.treelzebub.zinepress.util
+package net.treelzebub.zinepress.util.extensions
 
 import android.os.Bundle
 

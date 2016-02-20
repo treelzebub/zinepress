@@ -1,7 +1,6 @@
 package net.treelzebub.zinepress
 
 import android.content.Context
-import net.treelzebub.zinepress.net.sync.Sync
 
 /**
  * Created by Tre Murillo on 1/30/16
@@ -9,6 +8,5 @@ import net.treelzebub.zinepress.net.sync.Sync
 object ZinePressInit {
 
     fun init(c: Context) {
-        Sync.requestSync(c)
     }
 }

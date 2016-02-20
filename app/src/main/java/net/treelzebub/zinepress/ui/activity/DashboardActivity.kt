@@ -13,14 +13,13 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.content_dashboard.*
 import net.treelzebub.zinepress.R
-import net.treelzebub.zinepress.auth.PocketTokenManager
 import net.treelzebub.zinepress.db.articles.DbArticles
 import net.treelzebub.zinepress.db.articles.IArticle
+import net.treelzebub.zinepress.net.sync.Sync
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
-import net.treelzebub.zinepress.util.getSerializable
+import net.treelzebub.zinepress.util.extensions.getSerializable
 import net.treelzebub.zinepress.zine.EpubGenerator
 import net.treelzebub.zinepress.zine.SelectedArticles
-import rx.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_dashboard.drawer_layout as drawer
 import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
 
@@ -29,7 +28,6 @@ import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
  */
 class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private val tokenMgr: PocketTokenManager get() = PocketTokenManager.from(this)
     private val adapter = ArticlesAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +35,11 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
         setContentView(R.layout.activity_dashboard)
         setSupportActionBar(toolbar)
         setup(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Sync.requestSync(this)
         reload()
     }
 
