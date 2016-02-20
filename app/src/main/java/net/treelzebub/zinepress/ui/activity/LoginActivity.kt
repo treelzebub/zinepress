@@ -55,7 +55,7 @@ class LoginActivity : BaseRxActivity() {
         LifecycleObservable.bindActivityLifecycle(lifecycle(), manager.requestToken())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext {
+                .subscribe {
                     manager.saveRequestToken(it.code)
                     webView.loadUrl(manager.authUrl(it.code))
                 }
@@ -65,7 +65,7 @@ class LoginActivity : BaseRxActivity() {
         LifecycleObservable.bindActivityLifecycle(lifecycle(), tokenMgr.grantAccessToken(code))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext {
+                .subscribe {
                     tokenMgr.storage.storeAccessToken(it)
                 }
     }
