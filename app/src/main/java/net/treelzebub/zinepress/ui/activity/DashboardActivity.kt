@@ -8,19 +8,21 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
-import butterknife.bindView
+import android.widget.Toast
 import kotlinx.android.synthetic.main.content_dashboard.*
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.db.articles.DbArticles
 import net.treelzebub.zinepress.db.articles.IArticle
-import net.treelzebub.zinepress.net.sync.Sync
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
+import net.treelzebub.zinepress.util.ToastUtils
 import net.treelzebub.zinepress.util.extensions.getSerializable
 import net.treelzebub.zinepress.zine.EpubGenerator
 import net.treelzebub.zinepress.zine.SelectedArticles
+import rx.android.lifecycle.LifecycleObservable
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_dashboard.drawer_layout as drawer
 import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
 
@@ -28,8 +30,6 @@ import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
  * Created by Tre Murillo on 1/2/16
  */
 class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSelectedListener {
-
-    private val recycler: RecyclerView by bindView(R.id.recycler)
 
     private val listAdapter = ArticlesAdapter()
 
@@ -112,7 +112,7 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
             if (SelectedArticles.articles.isEmpty()) {
                 Snackbar.make(it, "No articles selected for zine!", Snackbar.LENGTH_LONG).show()
             } else {
-                EpubGenerator.buildBook()
+                generateBook()
             }
         }
         val toggle = ActionBarDrawerToggle(
@@ -123,7 +123,7 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
     }
 
     private fun reload() {
-        Sync.requestSync(this)
+        //        Sync.requestSync(this)
         listAdapter.setList(DbArticles.all())
     }
 
@@ -133,6 +133,10 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
 
     private fun handleEmpty() {
         //TODO
+    }
+
+    private fun generateBook() {
+        EpubGenerator.buildAndObserve(SelectedArticles.articles)
     }
 
     private fun warnDataLossOrDo(fn: () -> Unit) {

@@ -20,14 +20,15 @@ class ZineWriter(override val parent: IDatabase<IZine>) : IWriter<IZine> {
 
     override fun addOrUpdate(vararg items: IZine): Boolean {
         if (items.isEmpty()) return false
-        return bulkInsert(DbZines.uri(), *items)
+        return bulkInsert(parent.uri(), *items)
     }
 
     override fun toContentValues(item: IZine): ContentValues {
         val retval = ContentValues()
-        retval.maybePut(ZineCols.DATE,  item.sort)
+        retval.maybePut(ZineCols.ID,    item.id)
+        retval.maybePut(ZineCols.DATE,  item.date)
         retval.maybePut(ZineCols.TITLE, item.title)
-        retval.maybePut(ZineCols.ZINE,  item.zines)
+        retval.maybePut(ZineCols.ZINE,  item.articles)
         return retval
     }
 }

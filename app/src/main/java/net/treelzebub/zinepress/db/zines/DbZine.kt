@@ -8,15 +8,15 @@ import android.database.Cursor
 class DbZine : IZine {
 
     var i = 0 // 0 is _ID
-    override val id: String
-    override val sort: Long
+    override val id: Long
+    override val date: Long
     override val title: String
-    override val zines: ByteArray
+    override val articles: ByteArray
 
     constructor(c: Cursor) {
-        id    = c.getString(++i)
-        sort  = c.getLong(++i)
-        title = c.getString(++i)
-        zines = c.getBlob(++i)
+        id       = c.getLong(++i)
+        date     = c.getLong(++i)
+        title    = c.getString(++i)
+        articles = c.getBlob(++i)
     }
 }

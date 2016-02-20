@@ -1,28 +1,25 @@
 package net.treelzebub.zinepress.zine
 
+import net.treelzebub.zinepress.db.zines.IZine
+import net.treelzebub.zinepress.util.bytes
 import nl.siegmann.epublib.domain.Resource
 import java.io.Serializable
+import java.util.*
 
 /**
  * Created by Tre Murillo on 1/8/16
  */
-class Zine : Serializable {
+class Zine : IZine {
 
-    var date: Long
-    var zineArticles: List<ZineArticle>
+    override val id: Long
+    override val date: Long
+    override val title: String
+    override val articles: ByteArray
 
-    var title: String?        = null
-    var coverImage: Resource? = null
-
-    constructor(date: Long, zineArticles: List<ZineArticle>) {
+    constructor(id: Long, date: Long, title: String, zineArticles: HashSet<ZineArticle>) {
+        this.id           = id
         this.date         = date
-        this.zineArticles = zineArticles
-    }
-
-    constructor(date: Long, zineArticles: List<ZineArticle>, title: String, coverImage: Resource) {
-        this.date         = date
-        this.zineArticles = zineArticles
         this.title        = title
-        this.coverImage   = coverImage
+        this.articles     = zineArticles.bytes()
     }
 }

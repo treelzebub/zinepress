@@ -12,6 +12,6 @@ interface IArticle {
     val originalUrl: String
 
     fun pocketUrl(): String {
-        return "https://getpocket/a/read/$id"
+        return "https://getpocket.com/a/read/$id"
     }
 }
