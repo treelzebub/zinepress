@@ -1,6 +1,7 @@
 package net.treelzebub.zinepress.db.articles
 
 import android.database.Cursor
+import net.treelzebub.zinepress.api.model.PocketArticle
 
 /**
  * Created by Tre Murillo on 1/24/16
@@ -19,4 +20,15 @@ class DbArticle : IArticle {
         title       = c.getString(++i)
         originalUrl = c.getString(++i)
     }
+
+    constructor(a: PocketArticle) {
+        id          = a.id
+        date        = a.date
+        title       = a.title
+        originalUrl = a.originalUrl
+    }
+}
+
+fun PocketArticle.i(): IArticle {
+    return DbArticle(this)
 }

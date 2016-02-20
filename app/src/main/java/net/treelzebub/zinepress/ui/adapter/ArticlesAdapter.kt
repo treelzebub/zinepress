@@ -12,11 +12,12 @@ import net.treelzebub.zinepress.db.articles.IArticle
 import net.treelzebub.zinepress.util.ToastUtils
 import net.treelzebub.zinepress.util.extensions.inflater
 import net.treelzebub.zinepress.zine.SelectedArticles
+import rx.functions.Action1
 
 /**
  * Created by Tre Murillo on 1/3/16
  */
-class ArticlesAdapter(c: Context) : RecyclerView.Adapter<ArticlesAdapter.ItemHolder>() {
+class ArticlesAdapter(c: Context) : RecyclerView.Adapter<ArticlesAdapter.ItemHolder>(), Action1<List<IArticle>> {
 
     private var list: List<IArticle>? = null
 
@@ -57,7 +58,7 @@ class ArticlesAdapter(c: Context) : RecyclerView.Adapter<ArticlesAdapter.ItemHol
         return 0
     }
 
-    fun setList(list: List<IArticle>) {
+    override fun call(list: List<IArticle>?) {
         this.list = list
         notifyDataSetChanged()
     }

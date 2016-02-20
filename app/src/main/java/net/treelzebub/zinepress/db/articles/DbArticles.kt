@@ -1,34 +1,33 @@
 package net.treelzebub.zinepress.db.articles
 
 import android.content.Context
-import android.database.Cursor
-import android.net.Uri
-import net.treelzebub.zinepress.R
-import net.treelzebub.zinepress.db.IDatabase
-import net.treelzebub.zinepress.db.IQuery
+import com.squareup.sqlbrite.BriteDatabase
+import rx.schedulers.Schedulers
+import com.squareup.sqlbrite.QueryObservable
+import com.squareup.sqlbrite.SqlBrite
 import net.treelzebub.zinepress.util.BaseInjection
+import net.treelzebub.zinepress.db.articles.ArticleCols._TABLE
 
 /**
  * Created by Tre Murillo on 1/28/16
  */
-object DbArticles : IDatabase<IArticle> {
+object DbArticles {
 
-    override val context: Context get() = BaseInjection.context
+    val sqlBrite: SqlBrite
+    val db: BriteDatabase
 
-    override fun uri(): Uri {
-        return Uri.Builder()
-                .scheme("content")
-                .authority(context.getString(R.string.authority_articles))
-                .build()
+    init {
+        val c: Context = BaseInjection.context
+        sqlBrite = SqlBrite.create()
+        db = sqlBrite.wrapDatabaseHelper(ArticlesSQLiteHelper(c), Schedulers.io())
+        db.setLoggingEnabled(true)
     }
 
-    override fun write(): ArticleWriter = ArticleWriter(this)
+    fun write(list: List<IArticle>) {
+        list.forEach { db.insert(_TABLE, it.toContentValues()) }
+    }
 
-    override fun all(): List<IArticle> = query().list()
-
-    override fun query(): ArticleQuery = ArticleQuery(this)
-
-    override fun cursor(query: IQuery<IArticle>): Cursor = query.cursor()
-
-    override fun list(query: IQuery<IArticle>): List<IArticle> = query.list()
+    fun query(): QueryObservable {
+        return db.createQuery(_TABLE, "SELECT * FROM $_TABLE")
+    }
 }
