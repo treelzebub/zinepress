@@ -29,14 +29,11 @@ class ArticleContentProvider : ContentProvider() {
             }
         }
 
-        private var helper: ArticlesSQLiteHelper by Delegates.notNull()
-        private var readDb: SQLiteDatabase       by Delegates.notNull()
-        private var writeDb: SQLiteDatabase      by Delegates.notNull()
+        private val helper: ArticlesSQLiteHelper by lazy { ArticlesSQLiteHelper(context) }
+        private val readDb: SQLiteDatabase       get() = helper.readableDatabase
+        private val writeDb: SQLiteDatabase      get() = helper.writableDatabase
 
         override fun onCreate(): Boolean {
-            helper = ArticlesSQLiteHelper(context)
-            readDb  = helper.readableDatabase
-            writeDb = helper.writableDatabase
             return true
         }
 
