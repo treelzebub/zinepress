@@ -12,7 +12,7 @@ import net.treelzebub.zinepress.auth.PocketTokenManager
 import net.treelzebub.zinepress.util.extensions.setGone
 import rx.android.lifecycle.LifecycleObservable
 import rx.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.activity_login.temp_text as tempText
+import rx.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.web_view as webView
 
 /**
@@ -20,28 +20,31 @@ import kotlinx.android.synthetic.main.activity_login.web_view as webView
  */
 class LoginActivity : BaseRxActivity() {
 
+    private val tokenMgr: PocketTokenManager get() = PocketTokenManager.from(this@LoginActivity)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        tempText.setGone()
         setupWebView()
         requestToken()
     }
 
     private fun setupWebView() {
-        val wvSettings = webView.settings
-        wvSettings.builtInZoomControls = true
-        wvSettings.javaScriptEnabled   = true
-        webView.setWebViewClient(object : WebViewClient() {
-            override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
-                if (url.startsWith(Constants.REDIRECT_URI)) {
-                    webView.setGone()
-                    val tokenMgr = PocketTokenManager.from(this@LoginActivity)
-                    storeAccessToken(tokenMgr.loadRequestToken())
-                    startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
-                }
+        webView.apply {
+            settings.apply {
+                builtInZoomControls = true
+                javaScriptEnabled   = true
             }
-        })
+            setWebViewClient(object : WebViewClient() {
+                override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
+                    if (url.startsWith(Constants.REDIRECT_URI)) {
+                        setGone()
+                        storeAccessToken(tokenMgr.loadRequestToken())
+                        startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
+                    }
+                }
+            })
+        }
     }
 
     private fun requestToken() {
@@ -50,19 +53,20 @@ class LoginActivity : BaseRxActivity() {
         grant.clientId = Constants.CONSUMER_KEY
         grant.redirectUri = Constants.REDIRECT_URI
         LifecycleObservable.bindActivityLifecycle(lifecycle(), manager.requestToken())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .doOnNext {
                     manager.saveRequestToken(it.code)
                     webView.loadUrl(manager.authUrl(it.code))
                 }
     }
 
     private fun storeAccessToken(code: String) {
-        val manager = PocketTokenManager.from(this)
-        LifecycleObservable.bindActivityLifecycle(lifecycle(), manager.grantAccessToken(code))
+        LifecycleObservable.bindActivityLifecycle(lifecycle(), tokenMgr.grantAccessToken(code))
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    manager.storage.storeAccessToken(it)
+                .doOnNext {
+                    tokenMgr.storage.storeAccessToken(it)
                 }
     }
 }

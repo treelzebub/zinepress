@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created by Tre Murillo on 1/3/16
  */
-public class PocketArticle {
+public class PocketArticle implements IArticle {
 
     @SerializedName("item_id")
     private final long id;

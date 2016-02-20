@@ -17,6 +17,7 @@ import net.treelzebub.zinepress.auth.PocketTokenManager
 import net.treelzebub.zinepress.db.articles.DbArticles
 import net.treelzebub.zinepress.db.articles.IArticle
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
+import net.treelzebub.zinepress.util.getSerializable
 import net.treelzebub.zinepress.zine.EpubGenerator
 import net.treelzebub.zinepress.zine.SelectedArticles
 import rx.android.schedulers.AndroidSchedulers
@@ -94,12 +95,14 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
     }
 
     private fun setup(savedInstanceState: Bundle?) {
-        val selectedArticles = savedInstanceState?.getSerializable("selected_articles")
-        if (selectedArticles != null) {
-            SelectedArticles.articles.addAll(selectedArticles as Set<IArticle>)
+        if (savedInstanceState != null) {
+            val selectedArticles = savedInstanceState.getSerializable<Set<IArticle>>("selected_articles")
+            SelectedArticles.articles.addAll(selectedArticles)
         }
-        recycler.layoutManager = LinearLayoutManager(this)
-        recycler.adapter = adapter
+        recycler.apply {
+            layoutManager = LinearLayoutManager(this@DashboardActivity)
+            adapter = adapter
+        }
         fab.setOnClickListener {
             if (SelectedArticles.articles.isEmpty()) {
                 Snackbar.make(it, "No articles selected for zine!", Snackbar.LENGTH_LONG).show()
@@ -115,32 +118,7 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
     }
 
     private fun reload() {
-        // Check if logged in, refresh articles
-        tokenMgr.storage.hasAccessToken()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    loggedIn ->
-                    if (loggedIn) {
-                        loadArticles()
-                    } else {
-                        showLogin()
-                    }
-                }
-    }
-
-    private fun loadArticles() {
-        //TODO try out SQLBrite
-        adapter.setList(DbArticles.get(this).all())
-//        bindActivityLifecycle(lifecycle(), articlesObservable)
-//                .observeOn(mainThread())
-//                .subscribe {
-//                    val articles = it.articles
-//                    if (articles.isEmpty()) {
-//                        handleEmpty()
-//                    } else {
-////                        adapter.setList(articles)
-//                    }
-//                }
+        adapter.setList(DbArticles.get().all())
     }
 
     private fun showLogin() {
