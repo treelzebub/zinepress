@@ -8,9 +8,10 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.app_bar_dashboard.*
+import butterknife.bindView
 import kotlinx.android.synthetic.main.content_dashboard.*
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.db.articles.DbArticles
@@ -28,7 +29,9 @@ import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
  */
 class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private val adapter = ArticlesAdapter()
+    private val recycler: RecyclerView by bindView(R.id.recycler)
+
+    private val listAdapter = ArticlesAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +69,7 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_refresh -> Sync.requestSync(this)
+            R.id.action_refresh -> reload()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -104,7 +107,7 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
         }
         recycler.apply {
             layoutManager = LinearLayoutManager(this@DashboardActivity)
-            adapter = adapter
+            adapter = listAdapter
         }
         fab.setOnClickListener {
             if (SelectedArticles.articles.isEmpty()) {
@@ -121,7 +124,7 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
     }
 
     private fun reload() {
-        adapter.setList(DbArticles.all())
+        listAdapter.setList(DbArticles.all())
     }
 
     private fun showLogin() {
