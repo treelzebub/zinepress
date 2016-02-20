@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
 /**
  * Created by Tre Murillo on 1/2/16
  */
-class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelectedListener {
+class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val recycler: RecyclerView by bindView(R.id.recycler)
 
@@ -42,7 +42,6 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
 
     override fun onResume() {
         super.onResume()
-        Sync.requestSync(this)
         reload()
     }
 
@@ -124,6 +123,7 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
     }
 
     private fun reload() {
+        Sync.requestSync(this)
         listAdapter.setList(DbArticles.all())
     }
 

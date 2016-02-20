@@ -36,9 +36,20 @@ class ArticleContentProvider : ContentProvider() {
         try {
             writeDb.insertWithOnConflict(ArticleCols._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE)
         } catch (e: SQLiteException) {
-            Log.e("Insert Error", e.message)
+            Log.e(TAG, e.message)
         }
         return uri
+    }
+
+    override fun bulkInsert(uri: Uri, values: Array<out ContentValues>?): Int {
+        writeDb.delete(ArticleCols._TABLE, null, null)
+        var count = 0
+        values?.forEach {
+            insert(uri, it)
+            ++count
+        }
+        Log.d(TAG, "Inserted $count items.")
+        return count
     }
 
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {

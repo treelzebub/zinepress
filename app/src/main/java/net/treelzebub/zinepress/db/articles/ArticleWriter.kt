@@ -14,7 +14,7 @@ class ArticleWriter(override val parent: DbArticles) : IWriter<IArticle> {
     private val context = parent.context
 
     fun insertAll(uri: Uri, list: List<PocketArticle>): Boolean {
-        return bulkInsert(uri, *list.map { DbArticle(it) }.toTypedArray())
+        return bulkInsert(uri, *list.toTypedArray())
     }
 
     override fun bulkInsert(uri: Uri, vararg items: IArticle): Boolean {
@@ -24,7 +24,7 @@ class ArticleWriter(override val parent: DbArticles) : IWriter<IArticle> {
 
     override fun addOrUpdate(vararg items: IArticle): Boolean {
         if (items.isEmpty()) return false
-        return bulkInsert(DbArticles.uri(), *items)
+        return bulkInsert(parent.uri(), *items)
     }
 
     override fun toContentValues(item: IArticle): ContentValues {
