@@ -2,6 +2,7 @@ package net.treelzebub.zinepress.db
 
 import android.content.Context
 import android.database.Cursor
+import android.net.Uri
 import net.treelzebub.zinepress.db.zines.ZineQuery
 
 /**
@@ -11,6 +12,7 @@ interface IDatabase<T> {
 
     val context: Context
 
+    fun uri(): Uri
     fun write(): IWriter<T>
     fun all(): List<T>
     fun query(): IQuery<T>

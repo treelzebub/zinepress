@@ -20,7 +20,7 @@ class ZineWriter(override val parent: IDatabase<IZine>) : IWriter<IZine> {
 
     override fun addOrUpdate(vararg items: IZine): Boolean {
         if (items.isEmpty()) return false
-        return bulkInsert(DbZines.uri(context), *items)
+        return bulkInsert(DbZines.uri(), *items)
     }
 
     override fun toContentValues(item: IZine): ContentValues {

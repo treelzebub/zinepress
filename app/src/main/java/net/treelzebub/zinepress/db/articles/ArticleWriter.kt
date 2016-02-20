@@ -19,7 +19,7 @@ class ArticleWriter(override val parent: DbArticles) : IWriter<IArticle> {
 
     override fun addOrUpdate(vararg items: IArticle): Boolean {
         if (items.isEmpty()) return false
-        return bulkInsert(DbArticles.uri(context), *items)
+        return bulkInsert(DbArticles.uri(), *items)
     }
 
     override fun toContentValues(item: IArticle): ContentValues {

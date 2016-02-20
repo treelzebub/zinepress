@@ -118,7 +118,7 @@ class DashboardActivity : BaseRxActivity(), NavigationView.OnNavigationItemSelec
     }
 
     private fun reload() {
-        adapter.setList(DbArticles.get().all())
+        adapter.setList(DbArticles.all())
     }
 
     private fun showLogin() {

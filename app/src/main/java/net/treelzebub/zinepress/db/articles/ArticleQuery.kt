@@ -22,7 +22,7 @@ class ArticleQuery(override val parent: DbArticles) : IQuery<IArticle> {
     override fun cursor(): Cursor {
         val selection = selection()
         return parent.context.contentResolver.query(
-                DbArticles.uri(parent.context),
+                DbArticles.uri(),
                 null,
                 selection.first, selection.second,
                 "${ArticleCols.DATE} DESC")
