@@ -9,6 +9,7 @@ import net.treelzebub.zinepress.Constants
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.auth.PocketAuthCodeGrant
 import net.treelzebub.zinepress.auth.PocketTokenManager
+import net.treelzebub.zinepress.net.sync.Sync
 import net.treelzebub.zinepress.util.extensions.setGone
 import rx.android.lifecycle.LifecycleObservable
 import rx.android.schedulers.AndroidSchedulers
@@ -40,6 +41,7 @@ class LoginActivity : BaseRxActivity() {
                     if (url.startsWith(Constants.REDIRECT_URI)) {
                         setGone()
                         storeAccessToken(tokenMgr.loadRequestToken())
+                        Sync.requestSync(this@LoginActivity)
                         startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
                     }
                 }

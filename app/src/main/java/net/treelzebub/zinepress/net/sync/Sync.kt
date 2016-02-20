@@ -11,7 +11,6 @@ import rx.Subscriber
 
 /**
  * Created by Tre Murillo on 2/20/16
- * Copyright(c) 2016 Level, Inc.
  */
 object Sync {
 
@@ -29,7 +28,7 @@ object Sync {
 
                     override fun onNext(r: PocketArticleResponse) {
                         DbArticles.apply {
-                            write().insertAll(uri(), r.articles)
+                            write().insertAll(uri(), r.articles.map { it.value })
                         }
                     }
 

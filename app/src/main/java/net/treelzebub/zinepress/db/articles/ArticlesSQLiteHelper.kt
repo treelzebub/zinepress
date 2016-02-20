@@ -11,12 +11,12 @@ import net.treelzebub.zinepress.db.articles.ArticleCols.*
 class ArticlesSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VER) {
 
     companion object {
-        const val DB_VER  = 1
+        const val DB_VER  = 2
         const val DB_NAME = "articles.db"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        val cols = "$_ID INTEGER PRIMARY KEY AUTOINCREMENT, $DATE INTEGER, $TITLE TEXT, $URL TEXT"
+        val cols = "$_ID INTEGER PRIMARY KEY AUTOINCREMENT, $ID INTEGER, $DATE INTEGER, $TITLE TEXT, $URL TEXT"
         db.execSQL("CREATE TABLE IF NOT EXISTS $_TABLE ($cols)")
     }
 

@@ -8,15 +8,12 @@ import android.database.sqlite.SQLiteDatabaseLockedException
 import android.database.sqlite.SQLiteException
 import android.net.Uri
 import android.util.Log
+import net.treelzebub.zinepress.util.extensions.TAG
 
 /**
  * Created by Tre Murillo on 1/31/16
  */
 class ArticleContentProvider : ContentProvider() {
-
-    companion object {
-        private val TAG = ArticleContentProvider::class.java.simpleName
-    }
 
     private val helper: ArticlesSQLiteHelper by lazy { ArticlesSQLiteHelper(context) }
     private val readDb: SQLiteDatabase       get() = helper.readableDatabase

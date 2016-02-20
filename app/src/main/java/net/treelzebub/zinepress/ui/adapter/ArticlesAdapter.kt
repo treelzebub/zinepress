@@ -1,6 +1,5 @@
 package net.treelzebub.zinepress.ui.adapter
 
-import android.content.Context
 import android.support.v7.widget.AppCompatCheckBox
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -16,7 +15,7 @@ import net.treelzebub.zinepress.zine.SelectedArticles
 /**
  * Created by Tre Murillo on 1/3/16
  */
-class ArticlesAdapter(c: Context) : RecyclerView.Adapter<ArticlesAdapter.ItemHolder>() {
+class ArticlesAdapter() : RecyclerView.Adapter<ArticlesAdapter.ItemHolder>() {
 
     private var list: List<IArticle>? = null
 
