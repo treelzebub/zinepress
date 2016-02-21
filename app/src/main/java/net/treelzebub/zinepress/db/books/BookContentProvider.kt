@@ -28,6 +28,7 @@ class BookContentProvider : ContentProvider() {
         } catch (e: SQLiteException) {
             Log.e(TAG, e.message)
         }
+        Log.d(TAG, "Wrote ${values?.size() ?: 0} Books to db.")
         return uri
     }
 

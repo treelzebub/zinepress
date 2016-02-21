@@ -12,7 +12,7 @@ import nl.siegmann.epublib.domain.Book
 /**
  * Created by Tre Murillo on 2/20/16
  */
-class DbBooks : IDatabase<Book> {
+object DbBooks : IDatabase<Book> {
 
     override val context: Context get() = BaseInjection.context
 

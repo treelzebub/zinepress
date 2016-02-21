@@ -5,16 +5,22 @@ import com.squareup.okhttp.Callback
 import com.squareup.okhttp.Request
 import com.squareup.okhttp.Response
 import net.treelzebub.zinepress.db.articles.IArticle
+import net.treelzebub.zinepress.db.books.DbBooks
 import net.treelzebub.zinepress.db.zines.DbZines
 import net.treelzebub.zinepress.db.zines.IZine
+import net.treelzebub.zinepress.net.api.User
 import net.treelzebub.zinepress.util.BaseInjection
-import net.treelzebub.zinepress.util.ToastUtils
 import net.treelzebub.zinepress.util.extensions.TAG
+import net.treelzebub.zinepress.util.extensions.impl
+import nl.siegmann.epublib.domain.Author
 import nl.siegmann.epublib.domain.Book
+import nl.siegmann.epublib.domain.Resource
+import nl.siegmann.epublib.epub.EpubWriter
 import org.joda.time.DateTime
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
 
@@ -59,6 +65,33 @@ object EpubGenerator {
                 "My First Zine", //TODO we'll have to prompt the user for title and other customizations
                 zineArticles.toHashSet())
         writeZine(zine) // Zine is written to db to allow later editing.
+        createBook(zine)
+    }
+
+    private fun createBook(zine: IZine) {
+        val c = BaseInjection.context
+        val book = Book().apply {
+            val zineArticles = zine.articles.impl<ArrayList<ZineArticle>>()
+            metadata.apply {
+                addTitle(zine.title)
+                addPublisher("Zinepress for Android")
+                addAuthor(Author(User.getEmail(c)))
+            }
+            zineArticles.forEach {
+                addSection(it.title, Resource(it.rawHtml))
+            }
+        }
+        writeBookObj(book)
+    }
+
+    private fun writeBookObj(book: Book) {
+        try {
+            EpubWriter().write(book, FileOutputStream("${book.title}.epub"))
+        } catch (e: Exception) {
+            Log.e(TAG, e.message)
+        } finally {
+            DbBooks.write().addOrUpdate(book)
+        }
     }
 
     private fun writeZine(zine: IZine) {
