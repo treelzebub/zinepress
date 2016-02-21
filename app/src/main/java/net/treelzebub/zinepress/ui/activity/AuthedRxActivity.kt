@@ -12,12 +12,13 @@ open class AuthedRxActivity : BaseRxActivity() {
 
     override fun onResume() {
         super.onResume()
-        val hasToken = PocketTokenManager.from(this).storage.hasAccessToken()
-        LifecycleObservable.bindActivityLifecycle(lifecycle(), hasToken)
-            .doOnNext {
-                if (!it) {
-                    startActivity(Intent(this@AuthedRxActivity, LoginActivity::class.java))
+        LifecycleObservable.bindActivityLifecycle(lifecycle(),
+                PocketTokenManager.from(this).storage.hasAccessToken())
+                .doOnNext {
+                    hasToken ->
+                    if (!hasToken) {
+                        startActivity(Intent(this@AuthedRxActivity, LoginActivity::class.java))
+                    }
                 }
-            }
     }
 }
