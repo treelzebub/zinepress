@@ -119,6 +119,6 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
     }
 
     private fun generateBook() {
-        EpubGenerator.buildAndObserve(SelectedArticles.articles)
+        EpubGenerator.beginBuild(SelectedArticles.articles)
     }
 }

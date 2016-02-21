@@ -1,6 +1,7 @@
 package net.treelzebub.zinepress.zine
 
 import android.util.Log
+import android.widget.Toast
 import com.squareup.okhttp.Callback
 import com.squareup.okhttp.Request
 import com.squareup.okhttp.Response
@@ -10,17 +11,16 @@ import net.treelzebub.zinepress.db.zines.DbZines
 import net.treelzebub.zinepress.db.zines.IZine
 import net.treelzebub.zinepress.net.api.User
 import net.treelzebub.zinepress.util.BaseInjection
+import net.treelzebub.zinepress.util.ToastUtils
 import net.treelzebub.zinepress.util.extensions.TAG
 import net.treelzebub.zinepress.util.extensions.impl
 import nl.siegmann.epublib.domain.Author
 import nl.siegmann.epublib.domain.Book
 import nl.siegmann.epublib.domain.Resource
-import nl.siegmann.epublib.epub.EpubWriter
 import org.joda.time.DateTime
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
 
@@ -35,16 +35,30 @@ object EpubGenerator {
 
     private val htmlMap = hashMapOf<IArticle, String>()
 
-    fun buildAndObserve(articles: Set<IArticle>) {
-        htmlFromArticles(articles)
-        Observable.just(htmlMap).repeat()
+    fun beginBuild(articles: Set<IArticle>) {
+        getHtml(articles)
+        Observable.just(htmlMap)
+                .repeat()
+                .takeUntil {
+                    it.size == SelectedArticles.articles.size
+                }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnError {
+                    // TODO
+                }
                 .subscribe {
                     if (it.size == SelectedArticles.articles.size) {
                         toZineArticles(htmlMap)
+                        Log.d(TAG, "htmlMap toZineArticles")
                     }
                 }
+    }
+
+    private fun getHtml(articles: Set<IArticle>) {
+        articles.forEach {
+            HtmlGetter.handleCallback(it.pocketUrl(), HtmlCallback(it))
+        }
     }
 
     private fun toZineArticles(htmlMap: Map<IArticle, String>) {
@@ -68,6 +82,10 @@ object EpubGenerator {
         createBook(zine)
     }
 
+    private fun writeZine(zine: IZine) {
+        DbZines.write().addOrUpdate(zine)
+    }
+
     private fun createBook(zine: IZine) {
         val c = BaseInjection.context
         val book = Book().apply {
@@ -82,34 +100,17 @@ object EpubGenerator {
             }
         }
         DbBooks.write().addOrUpdate(book)
+        ToastUtils.show(c, "\"${book.title}\" successfully created.")
     }
 
-    private fun writeZine(zine: IZine) {
-        DbZines.write().addOrUpdate(zine)
-    }
-
-    private fun htmlFromArticles(articles: Set<IArticle>) {
-        articles.forEach {
-            listHtml(it)
-        }
-    }
-
-    private fun listHtml(article: IArticle) {
-        handleCallback(article.pocketUrl(), HtmlCallback(article))
-    }
-
-    private fun handleCallback(url: String, callback: Callback) {
-        HtmlGetter.htmlFromUrl(url, callback)
-    }
-
-    class HtmlCallback(val article: IArticle) : Callback {
+    private class HtmlCallback(val article: IArticle) : Callback {
         override fun onFailure(request: Request, e: IOException) {
             Log.e(TAG, e.message)
         }
 
         override fun onResponse(response: Response) {
             if (response.isSuccessful) {
-                htmlMap.put(article, response.body().string())
+                EpubGenerator.htmlMap.put(article, response.body().string())
                 Log.d(TAG, "Got HTML from Article ${article.id}.")
             } else {
                 Log.e(TAG, response.message())

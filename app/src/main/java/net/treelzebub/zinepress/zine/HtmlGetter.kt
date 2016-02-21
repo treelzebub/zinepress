@@ -10,7 +10,7 @@ import com.squareup.okhttp.Request
  */
 object HtmlGetter {
 
-    fun htmlFromUrl(url: String, callback: Callback): Call {
+    fun handleCallback(url: String, callback: Callback): Call {
         val client = OkHttpClient()
         val request = Request.Builder().url(url).build()
         val call = client.newCall(request)
