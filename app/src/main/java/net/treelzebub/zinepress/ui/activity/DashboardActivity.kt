@@ -1,28 +1,31 @@
 package net.treelzebub.zinepress.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
+import kotlinx.android.synthetic.main.content_dashboard.*
+import kotlinx.android.synthetic.main.nav_header_dashboard.*
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.db.articles.DbArticles
 import net.treelzebub.zinepress.db.articles.IArticle
 import net.treelzebub.zinepress.net.sync.Sync
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
 import net.treelzebub.zinepress.util.UserUtils
+import net.treelzebub.zinepress.util.extensions.TAG
 import net.treelzebub.zinepress.util.extensions.getSerializable
+import net.treelzebub.zinepress.util.extensions.onNextLayout
 import net.treelzebub.zinepress.zine.EpubGenerator
 import net.treelzebub.zinepress.zine.SelectedArticles
-
-import kotlinx.android.synthetic.main.content_dashboard.*
-import kotlinx.android.synthetic.main.nav_header_dashboard.*
-import kotlinx.android.synthetic.main.nav_header_dashboard.view.*
-import net.treelzebub.zinepress.util.extensions.onNextLayout
+import rx.android.lifecycle.LifecycleObservable
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_dashboard.drawer_layout as drawer
 import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
 
@@ -37,16 +40,12 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
         setSupportActionBar(toolbar)
+        reload()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         setup(savedInstanceState)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        reload()
     }
 
     override fun onBackPressed() {
@@ -80,6 +79,9 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
             R.id.nav_settings -> {
             }
             R.id.nav_logout -> {
+                UserUtils.logout(this)
+                finish()
+                startActivity(Intent(this, LoginActivity::class.java))
             }
         }
         drawer.closeDrawer(GravityCompat.START)
@@ -113,15 +115,24 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer.setDrawerListener(toggle)
         toggle.syncState()
-        navView.setNavigationItemSelectedListener(this)
-        navView.onNextLayout {
-            username.text = UserUtils.getName()
+        navView.apply {
+            setNavigationItemSelectedListener(this@DashboardActivity)
+            onNextLayout {
+                username.text = UserUtils.getName()
+            }
         }
     }
 
     private fun reload() {
-        Sync.requestSync(this)
-        listAdapter.setList(DbArticles.all())
+        LifecycleObservable.bindActivityLifecycle(lifecycle(),
+                Sync.requestSync(this))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    listAdapter.setList(DbArticles.all())
+                }, {
+                    Log.e(TAG, it.message)
+                })
     }
 
     private fun handleEmpty() {

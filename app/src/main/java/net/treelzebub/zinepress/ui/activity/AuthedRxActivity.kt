@@ -1,8 +1,9 @@
 package net.treelzebub.zinepress.ui.activity
 
 import android.content.Intent
-import android.os.Bundle
+import android.util.Log
 import net.treelzebub.zinepress.auth.PocketTokenManager
+import net.treelzebub.zinepress.util.extensions.TAG
 import rx.android.lifecycle.LifecycleObservable
 
 /**
@@ -14,11 +15,18 @@ open class AuthedRxActivity : BaseRxActivity() {
         super.onResume()
         LifecycleObservable.bindActivityLifecycle(lifecycle(),
                 PocketTokenManager.from(this).storage.hasAccessToken())
-                .doOnNext {
+                .subscribe({
                     hasToken ->
+                    Log.d(TAG, "hasToken check: $hasToken")
                     if (!hasToken) {
-                        startActivity(Intent(this@AuthedRxActivity, LoginActivity::class.java))
+                        showLogin()
                     }
-                }
+                }, {
+                    showLogin()
+                })
+    }
+
+    private fun showLogin() {
+        startActivity(Intent(this, LoginActivity::class.java))
     }
 }
