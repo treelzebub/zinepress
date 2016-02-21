@@ -39,6 +39,16 @@ class BookContentProvider : ContentProvider() {
             return 0
         }
     }
+    override fun bulkInsert(uri: Uri, values: Array<out ContentValues>?): Int {
+        writeDb.delete(BookCols._TABLE, null, null)
+        var count = 0
+        values?.forEach {
+            insert(uri, it)
+            ++count
+        }
+        Log.d(TAG, "Inserted $count items.")
+        return count
+    }
 
     override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor? {
         do {
