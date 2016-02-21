@@ -61,17 +61,13 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_camera -> {
+            R.id.nav_pocket -> {
             }
-            R.id.nav_gallery -> {
-            }
-            R.id.nav_slideshow -> {
-            }
-            R.id.nav_manage -> {
+            R.id.nav_library -> {
             }
             R.id.nav_share -> {
             }
-            R.id.nav_send -> {
+            R.id.nav_settings -> {
             }
         }
         drawer.closeDrawer(GravityCompat.START)
