@@ -5,7 +5,6 @@ import net.treelzebub.zinepress.db.articles.IArticle
 
 /**
  * Created by Tre Murillo on 2/20/16
- * Copyright(c) 2016 Level, Inc.
  */
 class PocketArticle : IArticle {
 

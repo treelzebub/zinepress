@@ -12,11 +12,11 @@ import java.io.File
  */
 object PrefsUtils {
 
-    public fun getPrefs(c: Context): SharedPreferences? {
+    fun getPrefs(c: Context = BaseInjection.context): SharedPreferences? {
         return c.applicationContext.getSharedPreferences(c.getString(R.string.key_prefs_file), Context.MODE_PRIVATE)
     }
 
-    public fun clearPrefs(c: Context): Boolean {
+    fun clearPrefs(c: Context): Boolean {
         getPrefs(c)?.edit()?.clear()?.commit()
         val root = c.filesDir ?: return false
         val dir = File(root.parent + "/shared_prefs/")
@@ -24,7 +24,7 @@ object PrefsUtils {
         return xml.delete()
     }
 
-    public fun <T> userPref(key: String, clazz: Class<T>): Pref<T> {
+    fun <T> userPref(key: String, clazz: Class<T>): Pref<T> {
         return object : SharedPref<T>(key, clazz) {
             override fun getSharedPreferences(c: Context): SharedPreferences? {
                 return getPrefs(c)
