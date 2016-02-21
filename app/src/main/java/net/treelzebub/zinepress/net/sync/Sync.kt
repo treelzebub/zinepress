@@ -5,9 +5,7 @@ import android.util.Log
 import net.treelzebub.zinepress.auth.PocketTokenManager
 import net.treelzebub.zinepress.db.articles.DbArticles
 import net.treelzebub.zinepress.net.api.PocketApiFactory
-import net.treelzebub.zinepress.net.api.model.PocketArticleResponse
 import net.treelzebub.zinepress.util.extensions.TAG
-import rx.Subscriber
 
 /**
  * Created by Tre Murillo on 2/20/16
@@ -15,6 +13,7 @@ import rx.Subscriber
 object Sync {
 
     fun requestSync(c: Context) {
+        Log.d(TAG, "sync requested.")
         val tokenMgr = PocketTokenManager.from(c)
         val api = PocketApiFactory.newApiService()
         tokenMgr.getValidAccessToken()
@@ -22,19 +21,14 @@ object Sync {
                     val authBody = PocketApiFactory.articlesRequestBody(it)
                     api.getArticles(authBody)
                 }
-                .subscribe(object : Subscriber<PocketArticleResponse>() {
-                    override fun onCompleted() {
+                .doOnError {
+                    Log.e(TAG, it.message)
+                }
+                .subscribe {
+                    DbArticles.apply {
+                        write().insertAll(uri(), it.articles.map { it.value })
                     }
-
-                    override fun onNext(r: PocketArticleResponse) {
-                        DbArticles.apply {
-                            write().insertAll(uri(), r.articles.map { it.value })
-                        }
-                    }
-
-                    override fun onError(e: Throwable) {
-                        Log.e(TAG, e.message)
-                    }
-                })
+                    Log.d(TAG, "sync complete.")
+                }
     }
 }

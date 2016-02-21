@@ -1,12 +1,10 @@
 package net.treelzebub.zinepress.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
@@ -14,6 +12,7 @@ import kotlinx.android.synthetic.main.content_dashboard.*
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.db.articles.DbArticles
 import net.treelzebub.zinepress.db.articles.IArticle
+import net.treelzebub.zinepress.net.sync.Sync
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
 import net.treelzebub.zinepress.util.extensions.getSerializable
 import net.treelzebub.zinepress.zine.EpubGenerator
@@ -110,7 +109,7 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
     }
 
     private fun reload() {
-        //        Sync.requestSync(this)
+        Sync.requestSync(this)
         listAdapter.setList(DbArticles.all())
     }
 

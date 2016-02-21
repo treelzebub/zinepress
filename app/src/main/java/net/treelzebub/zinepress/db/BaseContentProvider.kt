@@ -30,7 +30,6 @@ open class BaseContentProvider(val table: String) : ContentProvider() {
         } catch (e: SQLiteException) {
             Log.e(TAG, e.message)
         }
-        Log.d(TAG, "Wrote ${values?.size() ?: 0} items to $table.")
         return uri
     }
 
@@ -50,7 +49,7 @@ open class BaseContentProvider(val table: String) : ContentProvider() {
             insert(uri, it)
             ++count
         }
-        Log.d(TAG, "Inserted $count items.")
+        Log.d(TAG, "Inserted $count items into $table")
         return count
     }
 
@@ -59,7 +58,7 @@ open class BaseContentProvider(val table: String) : ContentProvider() {
             try {
                 return readDb.query(table, projection, selection, selectionArgs, null, null, sortOrder)
             } catch (_: SQLiteDatabaseLockedException) {
-                Log.e(TAG, "db locked")
+                Log.e(TAG, "${helper.databaseName} locked")
             }
         } while (true)
         throw RuntimeException("Impossibru!")
@@ -67,7 +66,9 @@ open class BaseContentProvider(val table: String) : ContentProvider() {
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {
         try {
-            return writeDb.delete(table, selection, selectionArgs)
+            return writeDb.delete(table, selection, selectionArgs).apply {
+                Log.d(TAG, "$this rows deleted from $table")
+            }
         } catch (e: SQLiteException) {
             Log.e(TAG, e.message)
             return 0
