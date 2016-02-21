@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import net.treelzebub.zinepress.auth.PocketTokenManager
 import net.treelzebub.zinepress.db.articles.DbArticles
+import net.treelzebub.zinepress.net.api.Pocket
 import net.treelzebub.zinepress.net.api.PocketApiFactory
 import net.treelzebub.zinepress.util.extensions.TAG
 
@@ -18,7 +19,7 @@ object Sync {
         val api = PocketApiFactory.newApiService()
         tokenMgr.getValidAccessToken()
                 .switchMap {
-                    val authBody = PocketApiFactory.articlesRequestBody(it)
+                    val authBody = Pocket.articlesRequestBody(it)
                     api.getArticles(authBody)
                 }
                 .doOnError {

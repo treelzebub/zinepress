@@ -28,7 +28,6 @@ class PocketTokenManager(val c: Context, storage: OAuth2AccessTokenStorage<OAuth
         }
     }
 
-    // Auth flow
     fun requestToken(): Observable<RequestToken> {
         return PocketApiFactory.newApiService().requestToken(RequestTokenBody(
                 Constants.CONSUMER_KEY, Constants.REDIRECT_URI))
