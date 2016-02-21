@@ -10,11 +10,11 @@ import rx.android.lifecycle.LifecycleObservable
  */
 open class AuthedRxActivity : BaseRxActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
         val hasToken = PocketTokenManager.from(this).storage.hasAccessToken()
         LifecycleObservable.bindActivityLifecycle(lifecycle(), hasToken)
-            .subscribe {
+            .doOnNext {
                 if (!it) {
                     startActivity(Intent(this@AuthedRxActivity, LoginActivity::class.java))
                 }
