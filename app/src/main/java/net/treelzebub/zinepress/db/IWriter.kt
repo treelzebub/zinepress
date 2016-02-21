@@ -2,12 +2,13 @@ package net.treelzebub.zinepress.db
 
 import android.content.ContentValues
 import android.net.Uri
+import java.io.Serializable
 
 /**
  * Created by Tre Murillo on 1/28/16
  */
 
-interface IWriter<T> {
+interface IWriter<T : Serializable> {
 
     val parent: IDatabase<T>
 

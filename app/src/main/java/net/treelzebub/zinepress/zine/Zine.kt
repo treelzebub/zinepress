@@ -1,9 +1,7 @@
 package net.treelzebub.zinepress.zine
 
 import net.treelzebub.zinepress.db.zines.IZine
-import net.treelzebub.zinepress.util.bytes
-import nl.siegmann.epublib.domain.Resource
-import java.io.Serializable
+import net.treelzebub.zinepress.util.extensions.bytes
 import java.util.*
 
 /**
