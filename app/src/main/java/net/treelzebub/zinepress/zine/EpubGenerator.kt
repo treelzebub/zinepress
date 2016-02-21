@@ -75,7 +75,7 @@ object EpubGenerator {
     private fun createZine(zineArticles: List<ZineArticle>) {
         val zine = Zine(
                 zineArticles.first().id,
-                DateTime.now().millis,
+                System.currentTimeMillis(),
                 "My First Zine", //TODO we'll have to prompt the user for title and other customizations
                 zineArticles.toHashSet())
         writeZine(zine) // Zine is written to db to allow later editing.
