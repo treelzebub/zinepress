@@ -13,11 +13,12 @@ import java.io.File
 object PrefsUtils {
 
     fun getPrefs(c: Context = BaseInjection.context): SharedPreferences? {
-        return c.applicationContext.getSharedPreferences(c.getString(R.string.key_prefs_file), Context.MODE_PRIVATE)
+        return c.applicationContext.getSharedPreferences(
+                c.getString(R.string.key_prefs_file), Context.MODE_PRIVATE)
     }
 
     fun clearPrefs(c: Context): Boolean {
-        getPrefs(c)?.edit()?.clear()?.commit()
+        getPrefs(c)!!.edit().clear().apply()
         val root = c.filesDir ?: return false
         val dir = File(root.parent + "/shared_prefs/")
         val xml = File(dir, c.getString(R.string.key_prefs_file) + ".xml")

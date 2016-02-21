@@ -1,10 +1,9 @@
 package net.treelzebub.zinepress.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
 import net.treelzebub.zinepress.auth.PocketTokenManager
+import net.treelzebub.zinepress.util.extensions.createIntent
 import rx.android.schedulers.AndroidSchedulers
-import kotlin.properties.Delegates
 
 /**
  * Created by Tre Murillo on 1/2/16
@@ -18,9 +17,9 @@ class MainActivity : BaseRxActivity() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { loggedIn ->
                         if (loggedIn) {
-                            startActivity(Intent(this, DashboardActivity::class.java))
+                            startActivity(createIntent<DashboardActivity>())
                         } else {
-                            startActivity(Intent(this, LoginActivity::class.java))
+                            startActivity(createIntent<LoginActivity>())
                         }
                     }
     }

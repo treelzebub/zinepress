@@ -14,5 +14,10 @@ interface IWriter<T : Serializable> {
 
     fun bulkInsert(uri: Uri, vararg items: T): Boolean
     fun addOrUpdate(vararg items: T): Boolean
+    fun clear() {
+        parent.apply {
+            context.contentResolver.delete(uri(), null, null)
+        }
+    }
     fun toContentValues(item: T): ContentValues
 }

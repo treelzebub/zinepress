@@ -39,9 +39,10 @@ class PocketTokenManager(val c: Context, storage: OAuth2AccessTokenStorage<OAuth
     }
 
     fun grantAccessToken(code: String): Observable<PocketAccessToken> {
-        val grant = PocketAuthCodeGrant()
-        grant.redirectUri = Constants.REDIRECT_URI
-        return grant.exchangeTokenUsingCode(code)
+        return PocketAuthCodeGrant().let {
+            it.redirectUri = Constants.REDIRECT_URI
+            it.exchangeTokenUsingCode(code)
+        }
     }
 
     fun saveRequestToken(code: String) {
@@ -57,5 +58,9 @@ class PocketTokenManager(val c: Context, storage: OAuth2AccessTokenStorage<OAuth
     fun getValidAccessToken(): Observable<String> {
         val grant = PocketRefreshAccessTokenGrant(Constants.CONSUMER_KEY, Constants.REDIRECT_URI)
         return super.getValidAccessToken(grant).map { token -> token.accessToken }
+    }
+
+    fun deleteToken() {
+        storage.removeAccessToken()
     }
 }

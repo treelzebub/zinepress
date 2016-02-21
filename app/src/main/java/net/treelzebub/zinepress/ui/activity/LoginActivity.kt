@@ -1,5 +1,6 @@
 package net.treelzebub.zinepress.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -8,12 +9,12 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import net.treelzebub.zinepress.Constants
 import net.treelzebub.zinepress.R
-import net.treelzebub.zinepress.auth.PocketAuthCodeGrant
 import net.treelzebub.zinepress.auth.PocketTokenManager
 import net.treelzebub.zinepress.util.BaseInjection
 import net.treelzebub.zinepress.util.ToastUtils
 import net.treelzebub.zinepress.util.UserUtils
 import net.treelzebub.zinepress.util.extensions.TAG
+import net.treelzebub.zinepress.util.extensions.createIntent
 import net.treelzebub.zinepress.util.extensions.setGone
 import rx.android.lifecycle.LifecycleObservable
 import rx.android.schedulers.AndroidSchedulers
@@ -24,6 +25,12 @@ import kotlinx.android.synthetic.main.activity_login.web_view as webView
  * Created by Tre Murillo on 1/2/16
  */
 class LoginActivity : BaseRxActivity() {
+
+    companion object {
+        fun intent(c: Context): Intent {
+            return Intent(c, LoginActivity::class.java)
+        }
+    }
 
     private val tokenMgr: PocketTokenManager get() = PocketTokenManager.from(this@LoginActivity)
 
@@ -36,6 +43,9 @@ class LoginActivity : BaseRxActivity() {
 
     private fun setupWebView() {
         webView.apply {
+            clearFormData()
+            clearHistory()
+            clearCache(true)
             settings.apply {
                 builtInZoomControls = true
                 javaScriptEnabled   = true
@@ -53,17 +63,13 @@ class LoginActivity : BaseRxActivity() {
 
     private fun requestToken() {
         Log.d(TAG, "Requesting RequestToken...")
-        val manager = PocketTokenManager.from(this)
-        val grant = PocketAuthCodeGrant()
-        grant.clientId = Constants.CONSUMER_KEY
-        grant.redirectUri = Constants.REDIRECT_URI
-        LifecycleObservable.bindActivityLifecycle(lifecycle(), manager.requestToken())
+        LifecycleObservable.bindActivityLifecycle(lifecycle(), tokenMgr.requestToken())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d(TAG, "RequestToken received with hash code ${it.hashCode()}.")
-                    manager.saveRequestToken(it.code)
-                    webView.loadUrl(manager.authUrl(it.code))
+                    tokenMgr.saveRequestToken(it.code)
+                    webView.loadUrl(tokenMgr.authUrl(it.code))
                 }
     }
 
@@ -80,7 +86,7 @@ class LoginActivity : BaseRxActivity() {
                 .subscribe {
                     UserUtils.saveName(it.username)
                     tokenMgr.storage.storeAccessToken(it)
-                    startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
+                    startActivity(createIntent<DashboardActivity>())
                     Log.d(TAG, "AccessToken stored for user ${it.username}.")
                 }
     }

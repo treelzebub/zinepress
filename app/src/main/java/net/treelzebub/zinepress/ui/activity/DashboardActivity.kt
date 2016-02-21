@@ -1,6 +1,5 @@
 package net.treelzebub.zinepress.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -18,9 +17,7 @@ import net.treelzebub.zinepress.db.articles.IArticle
 import net.treelzebub.zinepress.net.sync.Sync
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
 import net.treelzebub.zinepress.util.UserUtils
-import net.treelzebub.zinepress.util.extensions.TAG
-import net.treelzebub.zinepress.util.extensions.getSerializable
-import net.treelzebub.zinepress.util.extensions.onNextLayout
+import net.treelzebub.zinepress.util.extensions.*
 import net.treelzebub.zinepress.zine.EpubGenerator
 import net.treelzebub.zinepress.zine.SelectedArticles
 import rx.android.lifecycle.LifecycleObservable
@@ -81,7 +78,7 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
             R.id.nav_logout -> {
                 UserUtils.logout(this)
                 finish()
-                startActivity(Intent(this, LoginActivity::class.java))
+                startActivity(createIntent<MainActivity>())
             }
         }
         drawer.closeDrawer(GravityCompat.START)
