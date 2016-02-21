@@ -26,9 +26,9 @@ object DbZines : IDatabase<IZine> {
 
     override fun all(): List<IZine> = query().list()
 
+    override fun query(): ZineQuery = ZineQuery(this)
+
     override fun cursor(query: IQuery<IZine>): Cursor = query.cursor()
 
     override fun list(query: IQuery<IZine>): List<IZine> = query.list()
-
-    override fun query(): ZineQuery = ZineQuery(this)
 }

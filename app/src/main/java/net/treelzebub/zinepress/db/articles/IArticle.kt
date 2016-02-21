@@ -1,9 +1,11 @@
 package net.treelzebub.zinepress.db.articles
 
+import java.io.Serializable
+
 /**
  * Created by Tre Murillo on 1/28/16
  */
-interface IArticle {
+interface IArticle : Serializable {
 
 
     val id: Long
@@ -12,6 +14,6 @@ interface IArticle {
     val originalUrl: String
 
     fun pocketUrl(): String {
-        return "https://getpocket/a/read/$id"
+        return "https://getpocket.com/a/read/$id"
     }
 }

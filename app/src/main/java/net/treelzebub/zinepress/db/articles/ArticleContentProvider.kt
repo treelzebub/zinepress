@@ -21,6 +21,15 @@ class ArticleContentProvider : ContentProvider() {
 
     override fun onCreate() = true
 
+    override fun insert(uri: Uri, values: ContentValues?): Uri {
+        try {
+            writeDb.insertWithOnConflict(ArticleCols._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE)
+        } catch (e: SQLiteException) {
+            Log.e(TAG, e.message)
+        }
+        return uri
+    }
+
     override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor? {
         do {
             try {
@@ -30,15 +39,6 @@ class ArticleContentProvider : ContentProvider() {
             }
         } while (true)
         throw RuntimeException("Impossibru!")
-    }
-
-    override fun insert(uri: Uri, values: ContentValues?): Uri {
-        try {
-            writeDb.insertWithOnConflict(ArticleCols._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE)
-        } catch (e: SQLiteException) {
-            Log.e(TAG, e.message)
-        }
-        return uri
     }
 
     override fun bulkInsert(uri: Uri, values: Array<out ContentValues>?): Int {

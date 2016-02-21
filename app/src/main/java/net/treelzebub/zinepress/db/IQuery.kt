@@ -3,11 +3,12 @@ package net.treelzebub.zinepress.db
 import android.database.Cursor
 import android.database.DatabaseUtils
 import net.treelzebub.zinepress.util.pairOf
+import java.io.Serializable
 
 /**
  * Created by Tre Murillo on 1/28/16
  */
-interface IQuery<T> {
+interface IQuery<T : Serializable> {
 
     val parent: IDatabase<T>
 

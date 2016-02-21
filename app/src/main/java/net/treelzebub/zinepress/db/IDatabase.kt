@@ -4,11 +4,12 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import net.treelzebub.zinepress.db.zines.ZineQuery
+import java.io.Serializable
 
 /**
  * Created by Tre Murillo on 1/8/16
  */
-interface IDatabase<T> {
+interface IDatabase<T : Serializable> {
 
     val context: Context
 

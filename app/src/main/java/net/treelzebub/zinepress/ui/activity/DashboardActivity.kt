@@ -8,15 +8,12 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
-import butterknife.bindView
 import kotlinx.android.synthetic.main.content_dashboard.*
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.db.articles.DbArticles
 import net.treelzebub.zinepress.db.articles.IArticle
-import net.treelzebub.zinepress.net.sync.Sync
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
 import net.treelzebub.zinepress.util.extensions.getSerializable
 import net.treelzebub.zinepress.zine.EpubGenerator
@@ -28,8 +25,6 @@ import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
  * Created by Tre Murillo on 1/2/16
  */
 class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSelectedListener {
-
-    private val recycler: RecyclerView by bindView(R.id.recycler)
 
     private val listAdapter = ArticlesAdapter()
 
@@ -45,19 +40,11 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
         reload()
     }
 
-    override fun onPause() {
-        warnDataLossOrDo { super.onPause() }
-    }
-
-    override fun onDestroy() {
-        warnDataLossOrDo { super.onDestroy() }
-    }
-
     override fun onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
-            warnDataLossOrDo { super.onBackPressed() }
+            super.onBackPressed()
         }
     }
 
@@ -112,7 +99,7 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
             if (SelectedArticles.articles.isEmpty()) {
                 Snackbar.make(it, "No articles selected for zine!", Snackbar.LENGTH_LONG).show()
             } else {
-                EpubGenerator.buildBook()
+                generateBook()
             }
         }
         val toggle = ActionBarDrawerToggle(
@@ -123,37 +110,15 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
     }
 
     private fun reload() {
-        Sync.requestSync(this)
+        //        Sync.requestSync(this)
         listAdapter.setList(DbArticles.all())
-    }
-
-    private fun showLogin() {
-        startActivity(Intent(this, LoginActivity::class.java))
     }
 
     private fun handleEmpty() {
         //TODO
     }
 
-    private fun warnDataLossOrDo(fn: () -> Unit) {
-        if (SelectedArticles.articles.isNotEmpty()) {
-            warnDataLoss()
-        } else {
-            fn()
-        }
-    }
-
-    private fun warnDataLoss() {
-        AlertDialog.Builder(this)
-                .setTitle(R.string.alert_data_loss_title)
-                .setMessage(R.string.alert_data_loss_message)
-                .setPositiveButton(R.string.yes, {
-                    dialog, which ->
-                    dialog.dismiss()
-                })
-                .setNegativeButton(R.string.no, {
-                    dialog, which ->
-                    onBackPressed()
-                })
+    private fun generateBook() {
+        EpubGenerator.buildAndObserve(SelectedArticles.articles)
     }
 }

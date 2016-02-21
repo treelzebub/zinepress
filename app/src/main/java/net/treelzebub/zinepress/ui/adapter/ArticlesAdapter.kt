@@ -32,7 +32,6 @@ class ArticlesAdapter() : RecyclerView.Adapter<ArticlesAdapter.ItemHolder>() {
         holder.url.text   = article.originalUrl
         holder.item.setOnClickListener {
             holder.checkbox.let { it.isChecked = !it.isChecked }
-            ToastUtils.show(holder.itemView.context, article.originalUrl)
         }
         holder.checkbox.setOnCheckedChangeListener {
             box, isChecked ->
