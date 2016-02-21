@@ -8,15 +8,21 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.content_dashboard.*
+import android.widget.TextView
 import net.treelzebub.zinepress.R
 import net.treelzebub.zinepress.db.articles.DbArticles
 import net.treelzebub.zinepress.db.articles.IArticle
 import net.treelzebub.zinepress.net.sync.Sync
 import net.treelzebub.zinepress.ui.adapter.ArticlesAdapter
+import net.treelzebub.zinepress.util.UserUtils
 import net.treelzebub.zinepress.util.extensions.getSerializable
 import net.treelzebub.zinepress.zine.EpubGenerator
 import net.treelzebub.zinepress.zine.SelectedArticles
+
+import kotlinx.android.synthetic.main.content_dashboard.*
+import kotlinx.android.synthetic.main.nav_header_dashboard.*
+import kotlinx.android.synthetic.main.nav_header_dashboard.view.*
+import net.treelzebub.zinepress.util.extensions.onNextLayout
 import kotlinx.android.synthetic.main.activity_dashboard.drawer_layout as drawer
 import kotlinx.android.synthetic.main.activity_dashboard.nav_view as navView
 
@@ -31,6 +37,10 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
         setSupportActionBar(toolbar)
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
         setup(savedInstanceState)
     }
 
@@ -69,6 +79,8 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
             }
             R.id.nav_settings -> {
             }
+            R.id.nav_logout -> {
+            }
         }
         drawer.closeDrawer(GravityCompat.START)
         return true
@@ -102,6 +114,9 @@ class DashboardActivity : AuthedRxActivity(), NavigationView.OnNavigationItemSel
         drawer.setDrawerListener(toggle)
         toggle.syncState()
         navView.setNavigationItemSelectedListener(this)
+        navView.onNextLayout {
+            username.text = UserUtils.getName()
+        }
     }
 
     private fun reload() {

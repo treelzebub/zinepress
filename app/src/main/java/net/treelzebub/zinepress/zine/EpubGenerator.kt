@@ -1,7 +1,6 @@
 package net.treelzebub.zinepress.zine
 
 import android.util.Log
-import android.widget.Toast
 import com.squareup.okhttp.Callback
 import com.squareup.okhttp.Request
 import com.squareup.okhttp.Response
@@ -9,15 +8,14 @@ import net.treelzebub.zinepress.db.articles.IArticle
 import net.treelzebub.zinepress.db.books.DbBooks
 import net.treelzebub.zinepress.db.zines.DbZines
 import net.treelzebub.zinepress.db.zines.IZine
-import net.treelzebub.zinepress.net.api.User
 import net.treelzebub.zinepress.util.BaseInjection
 import net.treelzebub.zinepress.util.ToastUtils
+import net.treelzebub.zinepress.util.UserUtils
 import net.treelzebub.zinepress.util.extensions.TAG
 import net.treelzebub.zinepress.util.extensions.impl
 import nl.siegmann.epublib.domain.Author
 import nl.siegmann.epublib.domain.Book
 import nl.siegmann.epublib.domain.Resource
-import org.joda.time.DateTime
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -93,7 +91,7 @@ object EpubGenerator {
             metadata.apply {
                 addTitle(zine.title)
                 addPublisher("Zinepress for Android")
-                addAuthor(Author(User.getEmail(c)))
+                addAuthor(Author(UserUtils.getName()))
             }
             zineArticles.forEach {
                 addSection(it.title, Resource(it.rawHtml))

@@ -7,6 +7,7 @@ import de.rheinfabrik.heimdall.OAuth2AccessTokenStorage
 import de.rheinfabrik.heimdall.extras.SharedPreferencesOAuth2AccessTokenStorage
 import net.treelzebub.zinepress.Constants
 import net.treelzebub.zinepress.R
+import net.treelzebub.zinepress.auth.model.PocketAccessToken
 import net.treelzebub.zinepress.auth.model.RequestToken
 import net.treelzebub.zinepress.auth.model.RequestTokenBody
 import net.treelzebub.zinepress.net.api.PocketApiFactory
@@ -37,7 +38,7 @@ class PocketTokenManager(val c: Context, storage: OAuth2AccessTokenStorage<OAuth
         return "${Constants.AUTHORIZE_URL}?request_token=$code&redirect_uri=${Constants.REDIRECT_URI}"
     }
 
-    fun grantAccessToken(code: String): Observable<OAuth2AccessToken> {
+    fun grantAccessToken(code: String): Observable<PocketAccessToken> {
         val grant = PocketAuthCodeGrant()
         grant.redirectUri = Constants.REDIRECT_URI
         return grant.exchangeTokenUsingCode(code)

@@ -2,6 +2,7 @@ package net.treelzebub.zinepress.util.extensions
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewTreeObserver
 
 /**
  * Created by Tre Murillo on 1/2/16
@@ -27,5 +28,17 @@ fun View.setVisibleInvisible(pred: Boolean) {
         visibility = View.VISIBLE
     } else {
         visibility = View.INVISIBLE
+    }
+}
+
+fun View.onNextLayout(fn: () -> Unit) {
+    viewTreeObserver?.addOnGlobalLayoutListener(SingleLayoutListener(this, fn))
+}
+
+private class SingleLayoutListener(private val view: View, private val fn: () -> Unit) :
+        ViewTreeObserver.OnGlobalLayoutListener {
+    override fun onGlobalLayout() {
+        view.viewTreeObserver?.removeOnGlobalLayoutListener(this)
+        fn()
     }
 }
