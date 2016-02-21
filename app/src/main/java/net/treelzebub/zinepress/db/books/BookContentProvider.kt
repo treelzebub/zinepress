@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabaseLockedException
 import android.database.sqlite.SQLiteException
 import android.net.Uri
 import android.util.Log
-import net.treelzebub.zinepress.db.articles.ArticleCols
 import net.treelzebub.zinepress.util.extensions.TAG
 
 /**
@@ -17,8 +16,8 @@ import net.treelzebub.zinepress.util.extensions.TAG
 class BookContentProvider : ContentProvider() {
 
     private val helper: BookSQLiteHelper by lazy { BookSQLiteHelper(context) }
-    private val writeDb = helper.writableDatabase
-    private val readDb  = helper.readableDatabase
+    private val readDb: SQLiteDatabase   get() = helper.readableDatabase
+    private val writeDb: SQLiteDatabase  get() = helper.writableDatabase
 
     override fun onCreate() = true
 

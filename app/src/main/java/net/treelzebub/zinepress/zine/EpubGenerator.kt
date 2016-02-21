@@ -71,7 +71,7 @@ object EpubGenerator {
     private fun createBook(zine: IZine) {
         val c = BaseInjection.context
         val book = Book().apply {
-            val zineArticles = zine.articles.impl<ArrayList<ZineArticle>>()
+            val zineArticles = zine.articles.impl<HashSet<ZineArticle>>()
             metadata.apply {
                 addTitle(zine.title)
                 addPublisher("Zinepress for Android")
@@ -81,17 +81,7 @@ object EpubGenerator {
                 addSection(it.title, Resource(it.rawHtml))
             }
         }
-        writeBookObj(book)
-    }
-
-    private fun writeBookObj(book: Book) {
-        try {
-            EpubWriter().write(book, FileOutputStream("${book.title}.epub"))
-        } catch (e: Exception) {
-            Log.e(TAG, e.message)
-        } finally {
-            DbBooks.write().addOrUpdate(book)
-        }
+        DbBooks.write().addOrUpdate(book)
     }
 
     private fun writeZine(zine: IZine) {
